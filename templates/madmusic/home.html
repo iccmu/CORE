@@ -1,0 +1,44 @@
+{% extends "base/base.html" %}
+
+{% block title %}{% if proyecto %}{{ proyecto.titulo }} - ICCMU{% else %}Madmusic - ICCMU{% endif %}{% endblock %}
+
+{% block header_title %}{% if proyecto %}{{ proyecto.titulo }}{% else %}Madmusic{% endif %}{% endblock %}
+{% block header_subtitle %}{% if proyecto and proyecto.acronimo %}{{ proyecto.acronimo }}{% else %}Proyecto Madmusic{% endif %}{% endblock %}
+
+{% block content %}
+{% if proyecto %}
+    {% if proyecto.resumen %}
+    <div class="info-box">
+        <p>{{ proyecto.resumen }}</p>
+    </div>
+    {% endif %}
+    
+    {% if proyecto.cuerpo %}
+    <div>
+        {{ proyecto.cuerpo|linebreaks }}
+    </div>
+    {% endif %}
+    
+    {% if proyecto.fecha_inicio or proyecto.fecha_fin %}
+    <div style="margin-top: 30px;">
+        <h2>Información del Proyecto</h2>
+        {% if proyecto.fecha_inicio %}
+        <p><strong>Fecha de inicio:</strong> {{ proyecto.fecha_inicio|date:"d/m/Y" }}</p>
+        {% endif %}
+        {% if proyecto.fecha_fin %}
+        <p><strong>Fecha de fin:</strong> {{ proyecto.fecha_fin|date:"d/m/Y" }}</p>
+        {% endif %}
+        {% if proyecto.url_oficial %}
+        <p><strong>Web oficial:</strong> <a href="{{ proyecto.url_oficial }}" target="_blank">{{ proyecto.url_oficial }}</a></p>
+        {% endif %}
+    </div>
+    {% endif %}
+{% else %}
+<div class="info-box">
+    <h2>Bienvenido a Madmusic</h2>
+    <p>Esta es la aplicación del proyecto Madmusic del ICCMU.</p>
+    <p><strong>Nota:</strong> No se ha encontrado información del proyecto en la base de datos.</p>
+    <p>Puedes crear un proyecto con slug "madmusic" desde el <a href="/admin/">panel de administración</a>.</p>
+</div>
+{% endif %}
+{% endblock %}

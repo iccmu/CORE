@@ -1,0 +1,36 @@
+{% extends "base/base.html" %}
+
+{% block title %}Test - ICCMU{% endblock %}
+
+{% block header_title %}Test{% endblock %}
+{% block header_subtitle %}App de Pruebas y Diagnóstico{% endblock %}
+
+{% block content %}
+<div class="info-box">
+    <h2>Estado del Sistema</h2>
+    <p><strong>Status:</strong> <span style="color: #28a745;">✓ OK</span></p>
+    <p><strong>Mensaje:</strong> Test app funcionando correctamente</p>
+    <p><strong>Host:</strong> {{ host }}</p>
+</div>
+
+<div>
+    <h2>Información de la Aplicación</h2>
+    <p>Esta es una aplicación de pruebas y diagnóstico para verificar el funcionamiento del sistema multidominio.</p>
+    
+    <div style="margin-top: 20px;">
+        <h3>Endpoints Disponibles</h3>
+        <ul style="margin-left: 30px; margin-top: 10px;">
+            <li><code>/test/</code> - Página principal (HTML)</li>
+            <li><code>/test/api/</code> - Endpoint JSON (si está configurado)</li>
+        </ul>
+    </div>
+    
+    <div style="margin-top: 30px;">
+        <h3>Información Técnica</h3>
+        <p><strong>App Name:</strong> test_app</p>
+        <p><strong>URL Pattern:</strong> /test/</p>
+        <p><strong>Template:</strong> test/home.html</p>
+    </div>
+</div>
+{% endblock %}
+
