@@ -34,3 +34,5 @@ git log --oneline -10  # Últimos 10 commits
 - Para trabajar con la versión más actualizada, clonar desde GitHub o hacer `git pull`
 - El análisis realizado se basó en la versión local existente
 
+
+

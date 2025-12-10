@@ -1,0 +1,490 @@
+{% extends "madmusic/base.html" %}
+{% load static %}
+
+{% block title %}{{ pagina.titulo }} - {% if proyecto %}{{ proyecto.titulo }}{% else %}Madmusic{% endif %} - ICCMU{% endblock %}
+
+{% block content %}
+<div id="main" style="margin-top: 0; padding-top: 20px; overflow: visible;">
+    <section id="page" style="overflow: visible;">
+        <div class="container" style="overflow: visible;">
+            <div class="row" style="overflow: visible;">
+                {% if sidebar_menu %}
+                <!-- Sidebar Robusto -->
+                <aside class="col-md-3 sidebar-robusto">
+                    <nav class="sidebar-navigation" id="sidebar-navigation">
+                        <div class="sidebar-header">
+                            <h3 class="sidebar-title">Navegación</h3>
+                        </div>
+                        <ul class="sidebar-menu" id="sidebar-menu">
+                            {% for item in sidebar_menu %}
+                            <li class="sidebar-menu-item {% if item.has_children %}has-children{% endif %} {% if item.is_current or item.is_ancestor %}active{% endif %}">
+                                <a href="{% url 'madmusic_pagina' slug=item.slug %}" 
+                                   class="sidebar-link {% if item.is_current %}current{% endif %}"
+                                   {% if item.is_current %}aria-current="page"{% endif %}>
+                                    <span class="link-text">{{ item.titulo }}</span>
+                                    {% if item.has_children %}
+                                    <span class="arrow-icon">›</span>
+                                    {% endif %}
+                                </a>
+                                {% if item.has_children %}
+                                <ul class="sidebar-submenu {% if item.is_current or item.is_ancestor %}expanded{% endif %}">
+                                    {% for child in item.children %}
+                                    <li class="sidebar-submenu-item {% if child.is_current %}active{% endif %}">
+                                        <a href="{% url 'madmusic_pagina' slug=child.slug %}" 
+                                           class="sidebar-sublink {% if child.is_current %}current{% endif %}">
+                                            {{ child.titulo }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                </aside>
+                {% endif %}
+                
+                <!-- Contenido principal -->
+                <div class="{% if sidebar_menu %}col-md-9{% else %}col-md-10 col-md-offset-1{% endif %}">
+                    <section id="tools">
+                        <article class="pagina-detalle">
+                            {% if pagina.titulo %}
+                            <h1 class="title" style="margin-bottom: 30px; font-size: 32px; font-weight: 700; color: #333;">{{ pagina.titulo }}</h1>
+                            {% endif %}
+                            
+                            <div class="pagina-cuerpo content" style="line-height: 1.8; font-size: 16px; color: #666;">
+                                {# Siempre renderizar como HTML seguro - el contenido viene del sitio original #}
+                                {{ pagina.cuerpo|safe }}
+                            </div>
+                            
+                            {% if proyecto %}
+                            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+                                <a href="{% url 'madmusic_home' %}" style="color: #d11922; text-decoration: none;">
+                                    ← Volver al inicio
+                                </a>
+                            </div>
+                            {% endif %}
+                        </article>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    /* Estilos para mejorar el formato del contenido */
+    .pagina-cuerpo {
+        margin-top: 20px;
+    }
+    
+    /* Estilos para párrafos */
+    .pagina-cuerpo p {
+        margin-bottom: 20px !important;
+        text-align: justify !important;
+        line-height: 1.8 !important;
+        font-size: 16px !important;
+        color: #666 !important;
+    }
+    
+    /* Estilos para títulos dentro del contenido */
+    .pagina-cuerpo h1,
+    .pagina-cuerpo h2,
+    .pagina-cuerpo h3,
+    .pagina-cuerpo h4,
+    .pagina-cuerpo h5,
+    .pagina-cuerpo h6 {
+        margin-top: 30px !important;
+        margin-bottom: 15px !important;
+        font-weight: 700 !important;
+        color: #333 !important;
+        line-height: 1.3 !important;
+    }
+    
+    .pagina-cuerpo h1 {
+        font-size: 28px !important;
+    }
+    
+    .pagina-cuerpo h2 {
+        font-size: 24px !important;
+    }
+    
+    .pagina-cuerpo h3 {
+        font-size: 20px !important;
+    }
+    
+    /* Estilos para listas */
+    .pagina-cuerpo ul,
+    .pagina-cuerpo ol {
+        margin: 20px 0 !important;
+        padding-left: 30px !important;
+        list-style-position: outside !important;
+    }
+    
+    .pagina-cuerpo ul {
+        list-style-type: disc !important;
+    }
+    
+    .pagina-cuerpo ol {
+        list-style-type: decimal !important;
+    }
+    
+    .pagina-cuerpo li {
+        margin-bottom: 10px !important;
+        line-height: 1.8 !important;
+    }
+    
+    /* Estilos para enlaces */
+    .pagina-cuerpo a {
+        color: #d11922 !important;
+        text-decoration: none !important;
+    }
+    
+    .pagina-cuerpo a:hover {
+        text-decoration: underline !important;
+    }
+    
+    /* Estilos para texto en negrita y cursiva */
+    .pagina-cuerpo strong,
+    .pagina-cuerpo b {
+        font-weight: 700 !important;
+        color: #333 !important;
+    }
+    
+    .pagina-cuerpo em,
+    .pagina-cuerpo i {
+        font-style: italic !important;
+    }
+    
+    /* Limpiar elementos innecesarios de Bootstrap */
+    .pagina-cuerpo .col-md-12,
+    .pagina-cuerpo .col-md-9,
+    .pagina-cuerpo .col-md-8,
+    .pagina-cuerpo .col-md-10,
+    .pagina-cuerpo .row {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+    
+    .pagina-cuerpo .breadcrumbs {
+        display: none !important;
+    }
+    
+    /* Asegurar que el contenido tenga buen espaciado */
+    .pagina-cuerpo > *:first-child {
+        margin-top: 0 !important;
+    }
+    
+    .pagina-cuerpo > *:last-child {
+        margin-bottom: 0 !important;
+    }
+    
+    /* Estilos para el sidebar robusto y sticky */
+    #main {
+        margin-top: 0 !important;
+        padding-top: 20px !important;
+        clear: both;
+        position: relative;
+        overflow: visible !important;
+        min-height: 100vh; /* Asegurar altura mínima para que sticky funcione */
+    }
+    
+    #main section#page {
+        clear: both;
+        position: relative;
+        overflow: visible !important;
+        min-height: 100vh; /* Asegurar altura mínima */
+    }
+    
+    #main section#page .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-left: 15px;
+        padding-right: 15px;
+        overflow: visible !important;
+        position: relative;
+    }
+    
+    #main section#page .row {
+        margin-left: -15px;
+        margin-right: -15px;
+        position: relative;
+        overflow: visible !important;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    /* ============================================
+       SIDEBAR ROBUSTO - Diseño completamente nuevo
+       ============================================ */
+    
+    /* Sidebar Robusto - Sticky y bien diseñado */
+    .sidebar-robusto {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 490px;
+        height: calc(100vh - 490px);
+        padding-left: 15px;
+        padding-right: 20px;
+        z-index: 100;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    
+    /* Navegación del sidebar */
+    .sidebar-navigation {
+        background: #ffffff;
+        border: 2px solid #d11922;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        position: relative;
+    }
+    
+    /* Header del sidebar */
+    .sidebar-header {
+        background: linear-gradient(135deg, #d11922 0%, #b50023 100%);
+        padding: 18px 20px;
+        border-bottom: 2px solid #b50023;
+    }
+    
+    .sidebar-title {
+        margin: 0;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-align: center;
+    }
+    
+    /* Menú del sidebar */
+    .sidebar-menu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        background: #ffffff;
+    }
+    
+    .sidebar-menu-item {
+        border-bottom: 1px solid #f0f0f0;
+        position: relative;
+    }
+    
+    .sidebar-menu-item:last-child {
+        border-bottom: none;
+    }
+    
+    /* Enlaces principales */
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        color: #333333;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        background: #ffffff;
+        position: relative;
+    }
+    
+    .sidebar-link:hover {
+        background: #fff5f5;
+        color: #d11922;
+        padding-left: 25px;
+    }
+    
+    .sidebar-link.current,
+    .sidebar-menu-item.active > .sidebar-link {
+        background: #fff5f5;
+        color: #d11922;
+        font-weight: 700;
+        border-left: 4px solid #d11922;
+        padding-left: 16px;
+    }
+    
+    .link-text {
+        flex: 1;
+    }
+    
+    .arrow-icon {
+        font-size: 20px;
+        color: #d11922;
+        font-weight: bold;
+        transition: transform 0.3s ease;
+        margin-left: 10px;
+    }
+    
+    .sidebar-menu-item.active > .sidebar-link .arrow-icon {
+        transform: rotate(90deg);
+    }
+    
+    /* Submenú */
+    .sidebar-submenu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        background: #fafafa;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out;
+    }
+    
+    .sidebar-submenu.expanded {
+        max-height: 1000px;
+    }
+    
+    .sidebar-submenu-item {
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .sidebar-submenu-item:last-child {
+        border-bottom: none;
+    }
+    
+    .sidebar-sublink {
+        display: block;
+        padding: 12px 20px 12px 40px;
+        color: #666666;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        background: #fafafa;
+        position: relative;
+    }
+    
+    .sidebar-sublink:hover {
+        background: #ffffff;
+        color: #d11922;
+        padding-left: 45px;
+    }
+    
+    .sidebar-sublink.current,
+    .sidebar-submenu-item.active > .sidebar-sublink {
+        background: #ffffff;
+        color: #d11922;
+        font-weight: 600;
+        border-left: 3px solid #d11922;
+        padding-left: 37px;
+    }
+    
+    /* Scrollbar personalizado */
+    .sidebar-robusto::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .sidebar-robusto::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+    
+    .sidebar-robusto::-webkit-scrollbar-thumb {
+        background: #d11922;
+        border-radius: 4px;
+    }
+    
+    .sidebar-robusto::-webkit-scrollbar-thumb:hover {
+        background: #b50023;
+    }
+    
+    /* Contenido principal */
+    #main .col-md-9 {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    /* Asegurar que el body y html no bloqueen el sticky */
+    body {
+        overflow-x: visible !important;
+    }
+    
+    html {
+        overflow-x: visible !important;
+    }
+    
+    /* Responsive: sidebar en móviles */
+    @media (max-width: 991px) {
+        .sidebar-robusto {
+            position: relative !important;
+            top: 0 !important;
+            height: auto !important;
+            max-height: none !important;
+            width: 100%;
+            margin-bottom: 30px;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+        
+        #main .col-md-9 {
+            width: 100%;
+        }
+        
+        .sidebar-navigation {
+            border-radius: 6px;
+        }
+    }
+    
+    /* Animaciones suaves */
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    .sidebar-menu-item {
+        animation: slideIn 0.3s ease-out;
+    }
+    
+    .sidebar-menu-item:nth-child(1) { animation-delay: 0.05s; }
+    .sidebar-menu-item:nth-child(2) { animation-delay: 0.1s; }
+    .sidebar-menu-item:nth-child(3) { animation-delay: 0.15s; }
+    .sidebar-menu-item:nth-child(4) { animation-delay: 0.2s; }
+    .sidebar-menu-item:nth-child(5) { animation-delay: 0.25s; }
+    .sidebar-menu-item:nth-child(6) { animation-delay: 0.3s; }
+</style>
+
+<script>
+    // JavaScript para mejorar la interactividad del sidebar robusto
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebarItems = document.querySelectorAll('.sidebar-menu-item.has-children');
+        
+        sidebarItems.forEach(item => {
+            const link = item.querySelector('.sidebar-link');
+            const submenu = item.querySelector('.sidebar-submenu');
+            
+            if (link && submenu) {
+                link.addEventListener('click', function(e) {
+                    // Si el submenú no está expandido y no es el enlace actual
+                    if (!submenu.classList.contains('expanded') && !item.classList.contains('active')) {
+                        e.preventDefault();
+                        // Cerrar otros submenús
+                        document.querySelectorAll('.sidebar-submenu.expanded').forEach(menu => {
+                            if (menu !== submenu) {
+                                menu.classList.remove('expanded');
+                                menu.parentElement.classList.remove('active');
+                            }
+                        });
+                        // Abrir este submenú
+                        submenu.classList.add('expanded');
+                        item.classList.add('active');
+                    }
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

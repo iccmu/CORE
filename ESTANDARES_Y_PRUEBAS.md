@@ -371,3 +371,5 @@ tests/
 - La gestión de usuarios debe ser segura pero no restrictiva para usuarios legítimos
 - Documentar decisiones importantes sobre estructura de datos y permisos
 
+
+

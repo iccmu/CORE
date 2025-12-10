@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Proyecto(models.Model):
     slug = models.SlugField(unique=True)
     titulo = models.CharField(max_length=200)
@@ -15,7 +16,9 @@ class Proyecto(models.Model):
 
 
 class Entrada(models.Model):
-    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE, related_name="entradas")
+    proyecto = models.ForeignKey(
+        Proyecto, on_delete=models.CASCADE, related_name="entradas"
+    )
     titulo = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     fecha_publicacion = models.DateField(auto_now_add=True)
@@ -34,7 +37,11 @@ class Entrada(models.Model):
 
 class Pagina(models.Model):
     proyecto = models.ForeignKey(
-        Proyecto, on_delete=models.SET_NULL, null=True, blank=True, related_name="paginas"
+        Proyecto,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="paginas",
     )
     titulo = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)

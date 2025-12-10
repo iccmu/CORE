@@ -1,0 +1,52 @@
+{% extends "madmusic/base.html" %}
+{% load static %}
+
+{% block title %}Noticias - {% if proyecto %}{{ proyecto.titulo }}{% else %}Madmusic{% endif %} - ICCMU{% endblock %}
+
+{% block content %}
+<section id="tools">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <h1>Noticias</h1>
+                
+                {% if entradas %}
+                    <div class="noticias-list">
+                        {% for entrada in entradas %}
+                        <article class="noticia-item" style="margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px solid #eee;">
+                            {% if entrada.imagen_destacada %}
+                            <div class="noticia-imagen" style="margin-bottom: 15px;">
+                                <img src="{{ entrada.imagen_destacada.url }}" alt="{{ entrada.titulo }}" style="max-width: 100%; height: auto;">
+                            </div>
+                            {% endif %}
+                            
+                            <h2 style="margin-bottom: 10px;">
+                                <a href="{% url 'madmusic_entrada' entrada.slug %}" style="color: #d11922; text-decoration: none;">
+                                    {{ entrada.titulo }}
+                                </a>
+                            </h2>
+                            
+                            <p class="noticia-fecha" style="color: #666; font-size: 0.9em; margin-bottom: 10px;">
+                                {{ entrada.fecha_publicacion|date:"d/m/Y" }}
+                            </p>
+                            
+                            {% if entrada.resumen %}
+                            <p class="noticia-resumen" style="color: #555; line-height: 1.6;">
+                                {{ entrada.resumen }}
+                            </p>
+                            {% endif %}
+                            
+                            <a href="{% url 'madmusic_entrada' entrada.slug %}" style="color: #d11922; text-decoration: none; font-weight: 600;">
+                                Leer más →
+                            </a>
+                        </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No hay noticias disponibles en este momento.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

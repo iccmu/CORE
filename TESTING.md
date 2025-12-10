@@ -224,3 +224,5 @@ make clean             # Limpiar archivos temporales
 - [Django Testing](https://docs.djangoproject.com/en/stable/topics/testing/)
 - [Coverage.py](https://coverage.readthedocs.io/)
 
+
+

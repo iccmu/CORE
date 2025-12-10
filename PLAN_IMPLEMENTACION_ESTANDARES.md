@@ -110,3 +110,5 @@ Crear `permissions` app o extender sistema de Django con permisos personalizados
 - [Django Security](https://docs.djangoproject.com/en/stable/topics/security/)
 - [Dublin Core Metadata](https://www.dublincore.org/)
 
+
+

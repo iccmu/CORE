@@ -1,0 +1,44 @@
+{% extends "madmusic/base.html" %}
+{% load static %}
+
+{% block title %}{{ entrada.titulo }} - {% if proyecto %}{{ proyecto.titulo }}{% else %}Madmusic{% endif %} - ICCMU{% endblock %}
+
+{% block content %}
+<section id="tools">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <article class="entrada-detalle">
+                    <h1 style="margin-bottom: 20px;">{{ entrada.titulo }}</h1>
+                    
+                    <p class="entrada-fecha" style="color: #666; font-size: 0.9em; margin-bottom: 30px;">
+                        Fecha de publicación: {{ entrada.fecha_publicacion|date:"d/m/Y" }}
+                    </p>
+                    
+                    {% if entrada.imagen_destacada %}
+                    <div class="entrada-imagen" style="margin-bottom: 30px;">
+                        <img src="{{ entrada.imagen_destacada.url }}" alt="{{ entrada.titulo }}" style="max-width: 100%; height: auto;">
+                    </div>
+                    {% endif %}
+                    
+                    {% if entrada.resumen %}
+                    <div class="entrada-resumen" style="background: #f8f9fa; border-left: 4px solid #d11922; padding: 20px; margin-bottom: 30px; font-style: italic;">
+                        <p>{{ entrada.resumen }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="entrada-cuerpo" style="line-height: 1.8;">
+                        {{ entrada.cuerpo|linebreaks }}
+                    </div>
+                    
+                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+                        <a href="{% url 'madmusic_noticias' %}" style="color: #d11922; text-decoration: none;">
+                            ← Volver a noticias
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

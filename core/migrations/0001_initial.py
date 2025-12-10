@@ -8,48 +8,92 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Proyecto',
+            name="Proyecto",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('slug', models.SlugField(unique=True)),
-                ('titulo', models.CharField(max_length=200)),
-                ('acronimo', models.CharField(blank=True, max_length=50)),
-                ('resumen', models.TextField(blank=True)),
-                ('cuerpo', models.TextField(blank=True)),
-                ('fecha_inicio', models.DateField(blank=True, null=True)),
-                ('fecha_fin', models.DateField(blank=True, null=True)),
-                ('url_oficial', models.URLField(blank=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("slug", models.SlugField(unique=True)),
+                ("titulo", models.CharField(max_length=200)),
+                ("acronimo", models.CharField(blank=True, max_length=50)),
+                ("resumen", models.TextField(blank=True)),
+                ("cuerpo", models.TextField(blank=True)),
+                ("fecha_inicio", models.DateField(blank=True, null=True)),
+                ("fecha_fin", models.DateField(blank=True, null=True)),
+                ("url_oficial", models.URLField(blank=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Pagina',
+            name="Pagina",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('titulo', models.CharField(max_length=200)),
-                ('slug', models.SlugField(unique=True)),
-                ('cuerpo', models.TextField()),
-                ('proyecto', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='paginas', to='core.proyecto')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("titulo", models.CharField(max_length=200)),
+                ("slug", models.SlugField(unique=True)),
+                ("cuerpo", models.TextField()),
+                (
+                    "proyecto",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="paginas",
+                        to="core.proyecto",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Entrada',
+            name="Entrada",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('titulo', models.CharField(max_length=200)),
-                ('slug', models.SlugField(unique=True)),
-                ('fecha_publicacion', models.DateField(auto_now_add=True)),
-                ('resumen', models.TextField(blank=True)),
-                ('cuerpo', models.TextField()),
-                ('imagen_destacada', models.ImageField(blank=True, null=True, upload_to='entradas/portadas/%Y/%m/%d')),
-                ('proyecto', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='entradas', to='core.proyecto')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("titulo", models.CharField(max_length=200)),
+                ("slug", models.SlugField(unique=True)),
+                ("fecha_publicacion", models.DateField(auto_now_add=True)),
+                ("resumen", models.TextField(blank=True)),
+                ("cuerpo", models.TextField()),
+                (
+                    "imagen_destacada",
+                    models.ImageField(
+                        blank=True, null=True, upload_to="entradas/portadas/%Y/%m/%d"
+                    ),
+                ),
+                (
+                    "proyecto",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="entradas",
+                        to="core.proyecto",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-fecha_publicacion'],
+                "ordering": ["-fecha_publicacion"],
             },
         ),
     ]

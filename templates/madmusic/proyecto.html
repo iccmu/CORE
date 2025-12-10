@@ -1,0 +1,56 @@
+{% extends "madmusic/base.html" %}
+{% load static %}
+
+{% block title %}{{ proyecto.titulo }} - ICCMU{% endblock %}
+
+{% block content %}
+<section id="tools">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <article class="proyecto-detalle">
+                    <h1 style="margin-bottom: 20px;">{{ proyecto.titulo }}</h1>
+                    
+                    {% if proyecto.acronimo %}
+                    <p class="acronimo" style="color: #666; font-size: 1.1em; margin-bottom: 20px;">
+                        {{ proyecto.acronimo }}
+                    </p>
+                    {% endif %}
+                    
+                    {% if proyecto.resumen %}
+                    <div class="proyecto-resumen" style="background: #f8f9fa; border-left: 4px solid #d11922; padding: 20px; margin-bottom: 30px;">
+                        <p>{{ proyecto.resumen }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if proyecto.cuerpo %}
+                    <div class="proyecto-cuerpo" style="line-height: 1.8;">
+                        {{ proyecto.cuerpo|linebreaks }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if proyecto.fecha_inicio or proyecto.fecha_fin or proyecto.url_oficial %}
+                    <div class="proyecto-meta" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                        {% if proyecto.fecha_inicio %}
+                        <p><strong>Fecha de inicio:</strong> {{ proyecto.fecha_inicio|date:"d/m/Y" }}</p>
+                        {% endif %}
+                        {% if proyecto.fecha_fin %}
+                        <p><strong>Fecha de fin:</strong> {{ proyecto.fecha_fin|date:"d/m/Y" }}</p>
+                        {% endif %}
+                        {% if proyecto.url_oficial %}
+                        <p><strong>Web oficial:</strong> <a href="{{ proyecto.url_oficial }}" target="_blank">{{ proyecto.url_oficial }}</a></p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+                        <a href="{% url 'madmusic_home' %}" style="color: #d11922; text-decoration: none;">
+                            ← Volver al inicio
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -35,3 +35,5 @@ Los tests se ejecutan automáticamente en cada push a través de GitHub Actions.
 
 Ver `TESTING.md` para documentación completa.
 
+
+
