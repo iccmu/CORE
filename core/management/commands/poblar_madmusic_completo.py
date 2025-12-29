@@ -230,3 +230,7 @@ class Command(BaseCommand):
         self.stdout.write(f"  Actualizadas: {pages_updated}")
         self.stdout.write(f"  No encontradas: {pages_not_found}")
         self.stdout.write("=" * 80)
+
+
+
+

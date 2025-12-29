@@ -74,3 +74,7 @@ python manage.py runserver
 - `http://127.0.0.1:8000/madmusic/proyecto-madmusic/` - Página del proyecto
 - `http://127.0.0.1:8000/static/madmusic/css/main.css` - Verificar CSS
 - `http://127.0.0.1:8000/static/madmusic/images/Danza_Goya.jpg` - Verificar imagen
+
+
+
+

@@ -31,12 +31,23 @@ def madmusic_noticias(request):
 
 
 def madmusic_entrada(request, slug):
-    entrada = get_object_or_404(Entrada, slug=slug)
-    return render(
-        request,
-        "madmusic/entrada.html",
-        {"entrada": entrada, "proyecto": entrada.proyecto, "app_name": "Madmusic"},
-    )
+    # Primero intentar buscar como Entrada
+    entrada = Entrada.objects.filter(slug=slug).first()
+    if entrada:
+        return render(
+            request,
+            "madmusic/entrada.html",
+            {"entrada": entrada, "proyecto": entrada.proyecto, "app_name": "Madmusic"},
+        )
+    
+    # Si no es una Entrada, verificar si es una Pagina y redirigir
+    pagina = Pagina.objects.filter(slug=slug).first()
+    if pagina:
+        return madmusic_pagina(request, slug)
+    
+    # Si no existe ni como Entrada ni como Pagina, lanzar 404
+    from django.http import Http404
+    raise Http404(f"No se encontró ninguna Entrada o Página con el slug: {slug}")
 
 
 def build_sidebar_menu(proyecto, current_slug=None):
@@ -124,6 +135,13 @@ def build_sidebar_menu(proyecto, current_slug=None):
 def madmusic_pagina(request, slug):
     # Limpiar slug (eliminar barras al inicio/final)
     slug = slug.strip('/')
+    
+    # IMPORTANTE: Primero verificar si existe una entrada con este slug
+    # Las entradas tienen prioridad sobre las páginas estáticas
+    entrada = Entrada.objects.filter(slug=slug).first()
+    if entrada:
+        # Si existe una entrada, redirigir a la vista de entrada
+        return madmusic_entrada(request, slug)
     
     # Buscar página por slug exacto
     pagina = Pagina.objects.filter(slug=slug).first()

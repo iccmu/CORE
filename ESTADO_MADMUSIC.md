@@ -109,3 +109,7 @@ python manage.py shell -c "from core.models import Pagina; print(Pagina.objects.
    - `http://127.0.0.1:8000/madmusic/proyecto-madmusic/`
    - `http://127.0.0.1:8000/madmusic/equipo/`
    - `http://127.0.0.1:8000/madmusic/contacto/`
+
+
+
+

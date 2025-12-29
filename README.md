@@ -1,5 +1,7 @@
 # ICCMU_PROYECTOS
 
+## USANDO CONDA (core)
+
 **Proyecto Django multidominio para las webs de proyectos del ICCMU**
 
 Este repositorio será la nueva base común para las webs de proyectos del ICCMU (Fondos, Madmusic, etc.) en un solo despliegue Django.

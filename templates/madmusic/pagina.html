@@ -182,21 +182,19 @@
         margin-bottom: 0 !important;
     }
     
-    /* Estilos para el sidebar robusto y sticky */
+    /* Estilos para el sidebar robusto - completamente estático */
     #main {
         margin-top: 0 !important;
         padding-top: 20px !important;
         clear: both;
         position: relative;
         overflow: visible !important;
-        min-height: 100vh; /* Asegurar altura mínima para que sticky funcione */
     }
     
     #main section#page {
         clear: both;
         position: relative;
         overflow: visible !important;
-        min-height: 100vh; /* Asegurar altura mínima */
     }
     
     #main section#page .container {
@@ -222,27 +220,33 @@
        SIDEBAR ROBUSTO - Diseño completamente nuevo
        ============================================ */
     
-    /* Sidebar Robusto - Sticky y bien diseñado */
+    /* Sidebar Robusto - Completamente estático, sin sticky */
     .sidebar-robusto {
-        position: -webkit-sticky;
-        position: sticky;
-        top: 490px;
-        height: calc(100vh - 490px);
+        position: relative !important;
+        top: 0 !important;
         padding-left: 15px;
         padding-right: 20px;
-        z-index: 100;
-        overflow-y: auto;
-        overflow-x: hidden;
+        z-index: 1000 !important;
+        overflow: visible !important;
+        pointer-events: auto !important;
+        background: transparent !important;
+        height: auto !important;
+        min-height: auto !important;
     }
     
-    /* Navegación del sidebar */
+    /* Navegación del sidebar - completamente estática, sin sticky */
     .sidebar-navigation {
+        position: relative !important;
+        top: 0 !important;
         background: #ffffff;
         border: 2px solid #d11922;
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        position: relative;
+        overflow: visible !important;
+        pointer-events: auto !important;
+        z-index: 1000 !important;
+        height: auto !important;
+        max-height: none !important;
     }
     
     /* Header del sidebar */
@@ -281,12 +285,12 @@
     
     /* Enlaces principales */
     .sidebar-link {
-        display: flex;
+        display: flex !important;
         align-items: center;
         justify-content: space-between;
         padding: 16px 20px;
         color: #333333;
-        text-decoration: none;
+        text-decoration: none !important;
         font-size: 14px;
         font-weight: 600;
         text-transform: uppercase;
@@ -294,6 +298,19 @@
         transition: all 0.3s ease;
         background: #ffffff;
         position: relative;
+        pointer-events: auto !important; /* Asegurar que los enlaces sean clickeables */
+        cursor: pointer !important;
+        z-index: 1001 !important;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+    
+    /* Asegurar que los enlaces sean clickeables incluso cuando tienen hijos */
+    .sidebar-menu-item.has-children .sidebar-link {
+        pointer-events: auto !important;
+        cursor: pointer !important;
     }
     
     .sidebar-link:hover {
@@ -351,15 +368,22 @@
     }
     
     .sidebar-sublink {
-        display: block;
+        display: block !important;
         padding: 12px 20px 12px 40px;
         color: #666666;
-        text-decoration: none;
+        text-decoration: none !important;
         font-size: 13px;
         font-weight: 500;
         transition: all 0.3s ease;
         background: #fafafa;
         position: relative;
+        pointer-events: auto !important; /* Asegurar que los enlaces sean clickeables */
+        cursor: pointer !important;
+        z-index: 1001 !important;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
     }
     
     .sidebar-sublink:hover {
@@ -402,7 +426,7 @@
         padding-right: 15px;
     }
     
-    /* Asegurar que el body y html no bloqueen el sticky */
+    /* Asegurar que el body y html no bloqueen */
     body {
         overflow-x: visible !important;
     }
@@ -418,18 +442,24 @@
             top: 0 !important;
             height: auto !important;
             max-height: none !important;
-            width: 100%;
+            width: 100% !important;
             margin-bottom: 30px;
             padding-right: 15px;
             padding-left: 15px;
         }
         
-        #main .col-md-9 {
-            width: 100%;
+        .sidebar-navigation {
+            position: relative !important;
+            top: 0 !important;
+            height: auto !important;
+            max-height: none !important;
+            border-radius: 6px;
         }
         
-        .sidebar-navigation {
-            border-radius: 6px;
+        #main section#page .col-md-9 {
+            margin-left: 0 !important;
+            max-width: 100% !important;
+            width: 100% !important;
         }
     }
     
@@ -455,11 +485,98 @@
     .sidebar-menu-item:nth-child(4) { animation-delay: 0.2s; }
     .sidebar-menu-item:nth-child(5) { animation-delay: 0.25s; }
     .sidebar-menu-item:nth-child(6) { animation-delay: 0.3s; }
+    
+    /* CRÍTICO: Asegurar que todos los elementos del sidebar sean interactuables */
+    .sidebar-robusto * {
+        pointer-events: auto !important;
+    }
+    
+    .sidebar-menu-item {
+        pointer-events: auto !important;
+    }
+    
+    .sidebar-menu {
+        pointer-events: auto !important;
+    }
+    
+    .sidebar-header {
+        pointer-events: auto !important;
+    }
+    
+    .sidebar-submenu {
+        pointer-events: auto !important;
+    }
+    
+    .sidebar-submenu-item {
+        pointer-events: auto !important;
+    }
+    
+    /* Asegurar que ningún elemento padre bloquee los clics */
+    #main section#page .row {
+        pointer-events: auto !important;
+    }
+    
+    #main section#page .container {
+        pointer-events: auto !important;
+    }
+    
+    /* Asegurar que el aside no esté bloqueado */
+    aside.sidebar-robusto {
+        pointer-events: auto !important;
+    }
+    
+    /* Asegurar que el elemento #velado no bloquee el sidebar */
+    #velado.out {
+        pointer-events: none !important;
+        z-index: 1 !important;
+    }
+    
+    /* Asegurar que el header no bloquee el sidebar */
+    #header {
+        z-index: 999 !important; /* Menor que el sidebar */
+    }
+    
+    #header .menu-principal-container,
+    #header #menu_principal_container {
+        z-index: 999 !important; /* Menor que el sidebar */
+    }
+    
+    /* Asegurar que ningún overlay bloquee el sidebar */
+    #header .overlay_container {
+        z-index: 2 !important; /* Muy bajo, solo para el header */
+        pointer-events: none !important;
+    }
+    
+    #header #header_image_slider {
+        z-index: 1 !important;
+        pointer-events: none !important;
+    }
+    
+    #header #header_text_slider {
+        z-index: 10 !important;
+        pointer-events: none !important;
+    }
 </style>
 
 <script>
     // JavaScript para mejorar la interactividad del sidebar robusto
     document.addEventListener('DOMContentLoaded', function() {
+        // Asegurar que el sidebar sea completamente interactuable
+        const sidebar = document.querySelector('.sidebar-robusto');
+        if (sidebar) {
+            sidebar.style.pointerEvents = 'auto';
+            sidebar.style.zIndex = '1000';
+        }
+        
+        // Asegurar que todos los enlaces sean clickeables
+        const sidebarLinks = document.querySelectorAll('.sidebar-link, .sidebar-sublink');
+        sidebarLinks.forEach(link => {
+            link.style.pointerEvents = 'auto';
+            link.style.cursor = 'pointer';
+            link.style.zIndex = '1001';
+        });
+        
+        // Manejar clics en items con hijos
         const sidebarItems = document.querySelectorAll('.sidebar-menu-item.has-children');
         
         sidebarItems.forEach(item => {
@@ -467,24 +584,57 @@
             const submenu = item.querySelector('.sidebar-submenu');
             
             if (link && submenu) {
+                // Asegurar que el enlace sea clickeable
+                link.style.pointerEvents = 'auto';
+                link.style.cursor = 'pointer';
+                
                 link.addEventListener('click', function(e) {
                     // Si el submenú no está expandido y no es el enlace actual
-                    if (!submenu.classList.contains('expanded') && !item.classList.contains('active')) {
+                    const isCurrentPage = link.classList.contains('current') || item.classList.contains('active');
+                    
+                    if (!submenu.classList.contains('expanded') && !isCurrentPage) {
                         e.preventDefault();
+                        e.stopPropagation();
+                        
                         // Cerrar otros submenús
                         document.querySelectorAll('.sidebar-submenu.expanded').forEach(menu => {
                             if (menu !== submenu) {
                                 menu.classList.remove('expanded');
-                                menu.parentElement.classList.remove('active');
+                                const parentItem = menu.parentElement;
+                                if (parentItem) {
+                                    parentItem.classList.remove('active');
+                                }
                             }
                         });
+                        
                         // Abrir este submenú
                         submenu.classList.add('expanded');
                         item.classList.add('active');
                     }
+                    // Si es el enlace actual, permitir navegación normal
                 });
             }
+        });
+        
+        // Asegurar que los enlaces sin hijos naveguen normalmente
+        const simpleLinks = document.querySelectorAll('.sidebar-menu-item:not(.has-children) .sidebar-link');
+        simpleLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Permitir navegación normal
+                this.style.pointerEvents = 'auto';
+            });
+        });
+        
+        // Debug: Log para verificar que los eventos funcionan
+        console.log('Sidebar inicializado:', {
+            sidebarItems: sidebarItems.length,
+            simpleLinks: simpleLinks.length,
+            sidebarLinks: sidebarLinks.length
         });
     });
 </script>
 {% endblock %}
+
+
+
+

@@ -18,3 +18,7 @@ def madmusic_url(slug):
     except Exception:
         # Si falla, devolver URL directa
         return f'/madmusic/{slug}/'
+
+
+
+

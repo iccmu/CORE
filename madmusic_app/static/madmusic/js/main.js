@@ -42,3 +42,7 @@ $(document).ready(function() {
         setInterval(nextSlide, 5000);
     }
 });
+
+
+
+

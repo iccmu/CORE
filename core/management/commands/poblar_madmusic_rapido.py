@@ -171,3 +171,7 @@ class Command(BaseCommand):
         self.stdout.write(f"  Páginas existentes: {pages_existing}")
         self.stdout.write("=" * 80)
         self.stdout.write("\nTodos los enlaces del menú ahora deberían funcionar!")
+
+
+
+

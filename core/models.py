@@ -27,6 +27,7 @@ class Entrada(models.Model):
     imagen_destacada = models.ImageField(
         upload_to="entradas/portadas/%Y/%m/%d", blank=True, null=True
     )
+    url_original = models.URLField(blank=True, help_text="URL original de la noticia en el sitio madmusic.iccmu.es")
 
     class Meta:
         ordering = ["-fecha_publicacion"]

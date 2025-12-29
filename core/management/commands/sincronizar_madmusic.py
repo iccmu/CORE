@@ -433,3 +433,7 @@ class Command(BaseCommand):
         self.stdout.write(f"  - Sin cambios: {sin_cambios}")
         self.stdout.write(f"  ✗ Errores: {errores}")
         self.stdout.write(f"{'='*80}\n")
+
+
+
+

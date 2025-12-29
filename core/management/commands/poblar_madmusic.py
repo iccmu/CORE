@@ -300,3 +300,7 @@ class Command(BaseCommand):
         self.stdout.write(f"  Páginas omitidas: {pages_skipped}")
         self.stdout.write(f"  Entradas creadas: {entradas_created}")
         self.stdout.write("=" * 80)
+
+
+
+
