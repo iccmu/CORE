@@ -1,0 +1,63 @@
+{% extends "madmusic/base.html" %}
+{% load wagtailcore_tags static cms_tags %}
+
+{% block title %}{{ page.title }} - Madmusic - ICCMU{% endblock %}
+
+{% block content %}
+<div id="main" style="margin-top: 0; padding-top: 20px; overflow: visible;">
+    <section id="page" style="overflow: visible;">
+        <div class="container" style="overflow: visible;">
+            <div class="row" style="overflow: visible;">
+                <!-- Contenido principal -->
+                <div class="col-md-10 col-md-offset-1">
+                    <section id="tools">
+                        <article class="pagina-detalle">
+                            {% if page.title %}
+                            <h1 class="title" style="margin-bottom: 30px; font-size: 32px; font-weight: 700; color: #333;">
+                                <span style="color: #d11922;">{{ page.title }}</span>
+                            </h1>
+                            {% endif %}
+                            
+                            <div class="pagina-cuerpo content" style="line-height: 1.8; font-size: 16px; color: #666;">
+                                {% if page.body %}
+                                    {# Para contenido HTML plano migrado, usar safe directamente #}
+                                    {# Cuando se edite desde Wagtail, se convertirá a richtext y funcionará con richtext #}
+                                    {{ page.body|safe }}
+                                {% else %}
+                                    <p>Esta página aún no tiene contenido. Puedes editarla desde el <a href="/admin/">admin de Wagtail</a>.</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+                                <a href="/madmusic/" style="color: #d11922; text-decoration: none;">
+                                    ← Volver al inicio
+                                </a>
+                            </div>
+                        </article>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    /* Estilos para mejorar el formato del contenido */
+    .pagina-cuerpo {
+        margin-top: 20px;
+    }
+    .pagina-cuerpo h2, .pagina-cuerpo h3 {
+        color: #d11922;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+    .pagina-cuerpo p {
+        margin-bottom: 15px;
+    }
+    .pagina-cuerpo ul, .pagina-cuerpo ol {
+        margin-left: 20px;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+

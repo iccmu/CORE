@@ -2,6 +2,7 @@ Django>=4.2,<5.0
 dj-database-url>=2.0.0
 Pillow>=10.0.0
 django-storages[azure]>=1.14.0
+wagtail>=5.2
 
 
 

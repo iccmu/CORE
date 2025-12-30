@@ -1,0 +1,17 @@
+{% extends "cms/base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<h1>{{ page.title }}</h1>
+{% if page.date %}
+    <p><strong>Fecha:</strong> {{ page.date }}</p>
+{% endif %}
+{% if page.featured_image %}
+    <img src="{{ page.featured_image.url }}" alt="{{ page.featured_image.title }}">
+{% endif %}
+{% if page.intro %}
+    <p><em>{{ page.intro }}</em></p>
+{% endif %}
+<div>{{ page.body|richtext }}</div>
+{% endblock %}
+

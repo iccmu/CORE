@@ -53,6 +53,19 @@ INSTALLED_APPS = [
     "fondos_app",
     "madmusic_app",
     "test_app",
+    "taggit",
+    "wagtail",
+    "wagtail.admin",
+    "wagtail.users",
+    "wagtail.images",
+    "wagtail.documents",
+    "wagtail.snippets",
+    "wagtail.sites",
+    "wagtail.contrib.forms",
+    "wagtail.contrib.redirects",
+    "wagtail.embeds",
+    "wagtail.search",
+    "cms",
 ]
 
 MIDDLEWARE = [
@@ -64,6 +77,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "proyectos.middleware.DomainUrlConfMiddleware",
+    "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
 
 ROOT_URLCONF = "proyectos.urls_root"
@@ -73,6 +87,7 @@ URLCONFS_BY_HOST = {
     "fondos.iccmu.es": "proyectos.urls_fondos",
     "madmusic.iccmu.es": "proyectos.urls_madmusic",
     "test.iccmu.es": "proyectos.urls_test",
+    # localhost y 127.0.0.1 usan ROOT_URLCONF (urls_root) que muestra la página de índice
 }
 
 TEMPLATES = [
@@ -169,3 +184,7 @@ else:
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Wagtail settings
+WAGTAIL_SITE_NAME = "ICCMU CMS"
+WAGTAILADMIN_BASE_URL = "http://madmusic.iccmu.es"

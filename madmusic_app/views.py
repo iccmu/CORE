@@ -31,8 +31,13 @@ def madmusic_noticias(request):
 
 
 def madmusic_entrada(request, slug):
-    # Primero intentar buscar como Entrada
-    entrada = Entrada.objects.filter(slug=slug).first()
+    proyecto = Proyecto.objects.filter(slug="madmusic").first()
+    
+    # Primero intentar buscar como Entrada del proyecto madmusic
+    entrada = None
+    if proyecto:
+        entrada = Entrada.objects.filter(proyecto=proyecto, slug=slug).first()
+    
     if entrada:
         return render(
             request,
@@ -41,7 +46,12 @@ def madmusic_entrada(request, slug):
         )
     
     # Si no es una Entrada, verificar si es una Pagina y redirigir
-    pagina = Pagina.objects.filter(slug=slug).first()
+    # Si no hay proyecto, buscar en todas las páginas (fallback)
+    if proyecto:
+        pagina = Pagina.objects.filter(proyecto=proyecto, slug=slug).first()
+    else:
+        pagina = Pagina.objects.filter(slug=slug).first()
+    
     if pagina:
         return madmusic_pagina(request, slug)
     
@@ -136,31 +146,43 @@ def madmusic_pagina(request, slug):
     # Limpiar slug (eliminar barras al inicio/final)
     slug = slug.strip('/')
     
+    # Obtener proyecto madmusic
+    proyecto = Proyecto.objects.filter(slug="madmusic").first()
+    
     # IMPORTANTE: Primero verificar si existe una entrada con este slug
     # Las entradas tienen prioridad sobre las páginas estáticas
-    entrada = Entrada.objects.filter(slug=slug).first()
+    entrada = None
+    if proyecto:
+        entrada = Entrada.objects.filter(proyecto=proyecto, slug=slug).first()
+    
     if entrada:
         # Si existe una entrada, redirigir a la vista de entrada
         return madmusic_entrada(request, slug)
     
-    # Buscar página por slug exacto
-    pagina = Pagina.objects.filter(slug=slug).first()
+    # Buscar página por slug exacto (filtrando por proyecto si existe)
+    if proyecto:
+        pagina = Pagina.objects.filter(proyecto=proyecto, slug=slug).first()
+    else:
+        pagina = Pagina.objects.filter(slug=slug).first()
     
     if not pagina:
         # Intentar buscar por slug sin barras iniciales/finales
         slug_clean = slug.rstrip('/').lstrip('/')
-        pagina = Pagina.objects.filter(slug=slug_clean).first()
+        if proyecto:
+            pagina = Pagina.objects.filter(proyecto=proyecto, slug=slug_clean).first()
+        else:
+            pagina = Pagina.objects.filter(slug=slug_clean).first()
     
     if not pagina:
         # Si no existe la página, intentar mostrar contenido del proyecto
-        proyecto = Proyecto.objects.filter(slug=slug).first()
-        if proyecto:
-            sidebar_menu = build_sidebar_menu(proyecto, slug)
+        proyecto_slug = Proyecto.objects.filter(slug=slug).first()
+        if proyecto_slug:
+            sidebar_menu = build_sidebar_menu(proyecto_slug, slug)
             return render(
                 request,
                 "madmusic/proyecto.html",
                 {
-                    "proyecto": proyecto, 
+                    "proyecto": proyecto_slug, 
                     "app_name": "Madmusic",
                     "sidebar_menu": sidebar_menu
                 },
@@ -170,7 +192,7 @@ def madmusic_pagina(request, slug):
         raise Http404(f"Página no encontrada: {slug}")
     
     # Construir el menú del sidebar
-    sidebar_menu = build_sidebar_menu(pagina.proyecto, slug)
+    sidebar_menu = build_sidebar_menu(pagina.proyecto if pagina.proyecto else proyecto, slug)
     
     return render(
         request,
