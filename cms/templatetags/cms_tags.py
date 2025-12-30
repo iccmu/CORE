@@ -8,10 +8,107 @@ from wagtail.fields import RichTextField
 register = template.Library()
 
 
+def get_menu_items(parent_page, current_page=None, max_depth=2, include_children=True):
+    """
+    Obtiene recursivamente las páginas del menú con sus hijos
+    
+    Args:
+        parent_page: Página padre
+        current_page: Página actual (para marcar activa)
+        max_depth: Profundidad máxima del menú
+        include_children: Si True, incluye hijos aunque no tengan show_in_menus=True
+    """
+    menu_items = []
+    
+    # Obtener hijos directos que están publicados y marcados para menú
+    children = parent_page.get_children().live().filter(show_in_menus=True).specific()
+    
+    for child in children:
+        item = {
+            'page': child,
+            'title': child.title,
+            'url': child.url,
+            'is_current': current_page and (child.id == current_page.id),
+            'is_ancestor': current_page and child.is_ancestor_of(current_page),
+            'children': [],
+        }
+        
+        # Si no hemos alcanzado el máximo de profundidad, obtener hijos
+        # Para submenús, incluimos todos los hijos aunque no tengan show_in_menus=True
+        if max_depth > 1:
+            # Obtener todos los hijos vivos para submenús
+            sub_children = child.get_children().live().specific()
+            for sub_child in sub_children:
+                sub_item = {
+                    'page': sub_child,
+                    'title': sub_child.title,
+                    'url': sub_child.url,
+                    'is_current': current_page and (sub_child.id == current_page.id),
+                    'is_ancestor': current_page and sub_child.is_ancestor_of(current_page),
+                    'children': [],
+                }
+                # Si hay más profundidad, obtener nietos también
+                if max_depth > 2:
+                    sub_item['children'] = get_menu_items(sub_child, current_page, max_depth - 1, include_children=False)
+                item['children'].append(sub_item)
+        
+        menu_items.append(item)
+    
+    return menu_items
+
+
+def _get_wagtail_menu_items(current_page=None, max_depth=2):
+    """
+    Función auxiliar para obtener items del menú
+    """
+    menu_items = []
+    try:
+        from cms.models import HomePage
+        home_page = HomePage.objects.filter(slug='madmusic-home').first()
+        if home_page:
+            menu_items = get_menu_items(home_page, current_page, max_depth)
+    except Exception:
+        pass
+    return menu_items if menu_items else []
+
+
+@register.inclusion_tag('cms/menu.html', takes_context=True)
+def wagtail_menu(context, max_depth=2):
+    """
+    Genera el menú principal de navegación desde Wagtail
+    """
+    current_page = context.get('page')
+    
+    # Obtener items del menú directamente (no depende del request)
+    menu_items = _get_wagtail_menu_items(current_page, max_depth)
+    
+    # Asegurarse de que siempre devolvemos un dict con menu_items (nunca None)
+    return {
+        'menu_items': menu_items,
+        'current_page': current_page,
+    }
+
+
+@register.simple_tag(takes_context=True)
+def wagtail_menu_html(context, max_depth=2):
+    """
+    Versión alternativa que renderiza el HTML directamente (fallback)
+    """
+    from django.template.loader import render_to_string
+    current_page = context.get('page')
+    menu_items = _get_wagtail_menu_items(current_page, max_depth)
+    
+    return render_to_string('cms/menu.html', {
+        'menu_items': menu_items,
+        'current_page': current_page,
+    })
+
+
 @register.simple_tag(takes_context=True)
 def menu_pages(context):
     """
     Obtiene las páginas hijas del root que tienen show_in_menus=True
+    (Mantenido para compatibilidad)
     """
     request = context.get('request')
     if not request:

@@ -1,3 +1,6 @@
+{% load static %}
+{% load wagtailcore_tags %}
+{% load cms_tags %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,11 +15,11 @@
     <link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet" type="text/css"/>
     
     <!-- CSS -->
-    {% load static %}
     <link href="{% static 'madmusic/css/bootstrap.min.css' %}" rel="stylesheet"/>
     <link href="{% static 'madmusic/css/main.css' %}" rel="stylesheet"/>
     <link href="{% static 'madmusic/css/custom.css' %}" rel="stylesheet"/>
     <link href="{% static 'madmusic/css/font-awesome.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'madmusic/css/wagtail-richtext.css' %}" rel="stylesheet"/>
     
     {% block extra_css %}{% endblock %}
 </head>
@@ -286,100 +289,33 @@
         <div class="menu-principal-container" id="menu_principal_container" style="pointer-events: auto; position: relative; z-index: 50;">
             <div class="container">
                 <ul class="menu" id="menu_principal" style="pointer-events: auto;">
-                    <li class="menu-item menu-item-has-children">
-                        <a href="/madmusic/proyecto-madmusic/">Acerca de MadMusic</a>
-                        <ul class="sub-menu">
-                            <li class="menu-item">
-                                <a href="/madmusic/proyecto-madmusic/objetivos/">Objetivos</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/proyecto-madmusic/investigacion/">Líneas de investigación</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item menu-item-has-children">
-                        <a href="/madmusic/equipo/">Equipo</a>
-                        <ul class="sub-menu">
-                            <li class="menu-item">
-                                <a href="/madmusic/equipo/alvaro-torrente' %}">Álvaro Torrente – Coordinador</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/equipo/grupos-beneficiarios' %}">Grupos Beneficiarios</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/equipo/grupos-asociados' %}">Grupos Asociados</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/equipo/participantes' %}">Participantes MadMusic 1</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item menu-item-has-children">
-                        <a href="/madmusic/divulgacion-cientifica/">Resultados científicos</a>
-                        <ul class="sub-menu">
-                            <li class="menu-item">
-                                <a href="/madmusic/divulgacion-cientifica/archivos/">Fondos documentales</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/divulgacion-cientifica/cuadernos-de-musica-iberoamericana/">Cuadernos de Música Iberoamericana</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/divulgacion-cientifica/articulos-en-revistas-cientificas/">Publicaciones</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/divulgacion-cientifica/publicaciones-en-abierto/">Publicaciones en abierto</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/divulgacion-cientifica/congresos-madmusic/">Congresos | Seminarios</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/divulgacion-cientifica/publicaciones-madmusic-2/">Destacados MadMusic 1</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="/madmusic/servicios-e-infraestructura/">Servicios e Infraestructura</a>
-                    </li>
-                    <li class="menu-item menu-item-has-children">
-                        <a href="/madmusic/transferencia/">Entidades y Transferencia</a>
-                        <ul class="sub-menu">
-                            <li class="menu-item">
-                                <a href="/madmusic/transferencia/empresas/">Entidades colaboradoras</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/transferencia/conferencias/">Conferencias</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/transferencia/conciertos/">Conciertos | Grabaciones</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/transferencia/exposiciones/">Exposiciones | Eventos</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/transferencia/divulgacion/">Divulgación</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item menu-item-has-children">
-                        <a href="/madmusic/formacion-empleo/">Formación | Empleo</a>
-                        <ul class="sub-menu">
-                            <li class="menu-item">
-                                <a href="/madmusic/formacion-empleo/formacion/">Tesis doctorales y TFMs</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/cursos-de-verano/">Cursos de verano</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/madmusic/formacion-empleo/empleo/">Empleo</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="/madmusic/noticias/">Noticias</a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="/madmusic/contacto/">Contacto</a>
-                    </li>
+                    {% if wagtail_menu_items %}
+                        {% for item in wagtail_menu_items %}
+                        <li class="menu-item {% if item.children %}menu-item-has-children{% endif %} {% if item.is_current or item.is_ancestor %}active{% endif %}">
+                            <a href="{{ item.url }}">{{ item.title }}</a>
+                            {% if item.children %}
+                            <ul class="sub-menu">
+                                {% for child in item.children %}
+                                <li class="menu-item {% if child.is_current %}active{% endif %}">
+                                    <a href="{{ child.url }}">{{ child.title }}</a>
+                                    {% if child.children %}
+                                    <ul class="sub-menu">
+                                        {% for grandchild in child.children %}
+                                        <li class="menu-item {% if grandchild.is_current %}active{% endif %}">
+                                            <a href="{{ grandchild.url }}">{{ grandchild.title }}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="menu-item"><a href="/madmusic/">INICIO</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

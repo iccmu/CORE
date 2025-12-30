@@ -1,0 +1,32 @@
+{% load wagtailcore_tags %}
+<ul class="menu" id="menu_principal" style="pointer-events: auto;">
+    {% if menu_items %}
+        {% for item in menu_items %}
+        <li class="menu-item {% if item.children %}menu-item-has-children{% endif %} {% if item.is_current or item.is_ancestor %}active{% endif %}">
+            <a href="{{ item.url }}">{{ item.title }}</a>
+            {% if item.children %}
+            <ul class="sub-menu">
+                {% for child in item.children %}
+                <li class="menu-item {% if child.is_current %}active{% endif %}">
+                    <a href="{{ child.url }}">{{ child.title }}</a>
+                    {% if child.children %}
+                    <ul class="sub-menu">
+                        {% for grandchild in child.children %}
+                        <li class="menu-item {% if grandchild.is_current %}active{% endif %}">
+                            <a href="{{ grandchild.url }}">{{ grandchild.title }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </li>
+        {% endfor %}
+    {% else %}
+        <!-- Fallback si no hay items -->
+        <li class="menu-item"><a href="/madmusic/">INICIO</a></li>
+    {% endif %}
+</ul>
+

@@ -1,0 +1,292 @@
+/**
+ * Estilos específicos para contenido RichText de Wagtail
+ * Aísla el contenido de Wagtail del CSS global del tema
+ * 
+ * IMPORTANTE: Estos estilos solo afectan al contenido dentro de .richtext
+ * y NO afectan a elementos fuera como #teasers, .iccmuteaser, etc.
+ */
+
+.richtext {
+    text-align: left !important;
+    line-height: 1.8;
+    font-size: 16px;
+    color: #666;
+}
+
+/* Resetear estilos de párrafos */
+.richtext p {
+    text-align: left !important;
+    margin-bottom: 15px;
+    line-height: 1.8;
+    font-size: 16px;
+    color: #666;
+}
+
+/* Resetear estilos de listas */
+.richtext ol,
+.richtext ul {
+    margin: 1rem 0 1rem 1.5rem !important;
+    padding-left: 1.5rem !important;
+    list-style-position: outside !important;
+    text-align: left !important;
+}
+
+.richtext ul {
+    list-style-type: disc !important;
+}
+
+.richtext ol {
+    list-style-type: decimal !important;
+}
+
+.richtext li {
+    margin: 0.25rem 0 !important;
+    line-height: 1.8 !important;
+    text-align: left !important;
+    display: list-item !important;
+}
+
+/* Resetear estilos de títulos */
+.richtext h1,
+.richtext h2,
+.richtext h3,
+.richtext h4,
+.richtext h5,
+.richtext h6 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-weight: 700;
+    color: #333;
+    line-height: 1.3;
+    text-align: left !important;
+}
+
+.richtext h1 {
+    font-size: 28px;
+    color: #d11922;
+}
+
+.richtext h2 {
+    font-size: 24px;
+    color: #d11922;
+}
+
+.richtext h3 {
+    font-size: 20px;
+    color: #d11922;
+}
+
+.richtext h4 {
+    font-size: 18px;
+}
+
+.richtext h5 {
+    font-size: 16px;
+}
+
+.richtext h6 {
+    font-size: 14px;
+}
+
+/* Estilos para enlaces */
+.richtext a {
+    color: #d11922;
+    text-decoration: none;
+}
+
+.richtext a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos para texto en negrita y cursiva */
+.richtext strong,
+.richtext b {
+    font-weight: 700;
+    color: #333;
+}
+
+.richtext em,
+.richtext i {
+    font-style: italic;
+}
+
+/* Estilos para imágenes */
+.richtext img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 1rem 0;
+}
+
+/* Estilos para citas */
+.richtext blockquote {
+    margin: 1.5rem 0;
+    padding: 1rem 1.5rem;
+    border-left: 4px solid #d11922;
+    background-color: #f5f5f5;
+    font-style: italic;
+    color: #666;
+}
+
+/* Estilos para código */
+.richtext code {
+    background-color: #f5f5f5;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.richtext pre {
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+.richtext pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+/* Estilos para tablas */
+.richtext table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.richtext th,
+.richtext td {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.richtext th {
+    background-color: #f5f5f5;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Asegurar que elementos dentro de richtext no hereden estilos problemáticos */
+/* IMPORTANTE: Solo aplicar a elementos directos e hijos, NO a elementos fuera de .richtext */
+.richtext > *,
+.richtext p,
+.richtext h1, .richtext h2, .richtext h3, .richtext h4, .richtext h5, .richtext h6,
+.richtext ul, .richtext ol, .richtext li,
+.richtext a, .richtext img, .richtext blockquote,
+.richtext code, .richtext pre, .richtext table {
+    box-sizing: border-box;
+}
+
+/* Prevenir que Bootstrap afecte el contenido */
+.richtext .row,
+.richtext .col-md-12,
+.richtext .col-md-9,
+.richtext .col-md-8,
+.richtext .col-md-10 {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+/* PROTECCIÓN: Asegurar que las tarjetas de noticias NO se vean afectadas por .richtext */
+/* Las tarjetas tienen sus propios estilos específicos que deben mantenerse */
+
+#teasers .iccmuteaser {
+    display: table !important;
+    margin-bottom: 20px !important;
+    box-shadow: 0px 3px 3px #ccc !important;
+    background-position: left center !important;
+}
+
+#teasers .iccmuteaser .img-container {
+    width: 20% !important;
+    display: table-cell !important;
+    position: relative !important;
+    background-color: #B50023 !important;
+    overflow: hidden !important;
+}
+
+#teasers .iccmuteaser .text-container {
+    width: 80% !important;
+    padding: 20px !important;
+    vertical-align: middle !important;
+    display: table-cell !important;
+    position: relative !important;
+    background-color: #fff !important;
+}
+
+#teasers .iccmuteaser .text-container .title {
+    font-weight: 700 !important;
+    color: #000 !important;
+    font-size: 22px !important;
+    margin-bottom: 10px !important;
+    text-decoration: none !important;
+    text-align: left !important;
+}
+
+#teasers .iccmuteaser .text-container .date {
+    color: #b50023 !important;
+    margin-bottom: 10px !important;
+    display: block !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    text-decoration: none !important;
+    text-align: left !important;
+}
+
+#teasers .iccmuteaser .text-container .description {
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    margin-bottom: 20px !important;
+    padding-right: 100px !important;
+    text-decoration: none !important;
+    color: #444 !important;
+    text-align: left !important;
+}
+
+#teasers .iccmuteaser .text-container .know_more {
+    font-weight: 700 !important;
+    color: #757c8b !important;
+    font-size: 18px !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+    margin-bottom: 0px !important;
+    float: right !important;
+    opacity: 0 !important;
+    padding-right: 20px !important;
+}
+
+#teasers .iccmuteaser:hover .text-container .know_more {
+    opacity: 1 !important;
+    padding-right: 0px !important;
+}
+
+/* Asegurar que los enlaces dentro de las tarjetas funcionen correctamente */
+#teasers .iccmuteaser a {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+#teasers .iccmuteaser .text-container .date a {
+    color: #b50023 !important;
+}
+
+#teasers .iccmuteaser .text-container .date a:hover {
+    text-decoration: underline !important;
+}
+
+/* Estilos para elementos de Wagtail específicos */
+.richtext .block-paragraph {
+    margin-bottom: 15px;
+}
+
+.richtext .block-heading {
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+

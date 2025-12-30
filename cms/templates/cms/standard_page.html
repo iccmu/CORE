@@ -18,11 +18,12 @@
                             </h1>
                             {% endif %}
                             
-                            <div class="pagina-cuerpo content" style="line-height: 1.8; font-size: 16px; color: #666;">
+                            <div class="pagina-cuerpo content">
                                 {% if page.body %}
-                                    {# Para contenido HTML plano migrado, usar safe directamente #}
-                                    {# Cuando se edite desde Wagtail, se convertirá a richtext y funcionará con richtext #}
-                                    {{ page.body|safe }}
+                                    {# Envolver en div.richtext para aislar estilos de Wagtail #}
+                                    <div class="richtext">
+                                        {{ page.body|richtext }}
+                                    </div>
                                 {% else %}
                                     <p>Esta página aún no tiene contenido. Puedes editarla desde el <a href="/admin/">admin de Wagtail</a>.</p>
                                 {% endif %}
@@ -42,21 +43,9 @@
 </div>
 
 <style>
-    /* Estilos para mejorar el formato del contenido */
+    /* Estilos para el contenedor de la página */
     .pagina-cuerpo {
         margin-top: 20px;
-    }
-    .pagina-cuerpo h2, .pagina-cuerpo h3 {
-        color: #d11922;
-        margin-top: 30px;
-        margin-bottom: 15px;
-    }
-    .pagina-cuerpo p {
-        margin-bottom: 15px;
-    }
-    .pagina-cuerpo ul, .pagina-cuerpo ol {
-        margin-left: 20px;
-        margin-bottom: 15px;
     }
 </style>
 {% endblock %}

@@ -1,5 +1,5 @@
 {% extends "madmusic/base.html" %}
-{% load wagtailcore_tags static %}
+{% load wagtailcore_tags wagtailimages_tags static %}
 
 {% block title %}{{ page.title }} - ICCMU - Instituto Complutense de Ciencias Musicales{% endblock %}
 
@@ -29,7 +29,10 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 {% if page.intro %}
-                    {{ page.intro|richtext }}
+                    {# Envolver en div.richtext para aislar estilos de Wagtail #}
+                    <div class="richtext">
+                        {{ page.intro|richtext }}
+                    </div>
                 {% endif %}
                 
                 <p style="margin-top: 30px; text-align: center;">
@@ -55,7 +58,7 @@
                         <div class="iccmuteaser">
                             {% if news_page.featured_image %}
                             <div class="img-container">
-                                <img src="{{ news_page.featured_image.url }}" alt="{{ news_page.title }}" class="attachment-iccmu_medium size-iccmu_medium wp-post-image">
+                                {% image news_page.featured_image width-400 class="attachment-iccmu_medium size-iccmu_medium wp-post-image" %}
                             </div>
                             {% endif %}
                             <div class="text-container">
@@ -64,15 +67,15 @@
                                     {% if news_page.date %}
                                         {{ news_page.date|date:"d" }} de {{ news_page.date|date:"F" }} de {{ news_page.date|date:"Y" }}
                                     {% endif %}
-                                    {% if news_page.intro %}
-                                    <p class="description">
-                                        {{ news_page.intro|truncatewords:30 }}
-                                    </p>
-                                    {% endif %}
-                                    <a href="{% pageurl news_page %}">
-                                        <span class="know_more">Leer más</span>
-                                    </a>
                                 </p>
+                                {% if news_page.intro %}
+                                <p class="description">
+                                    {{ news_page.intro|truncatewords:30 }}
+                                </p>
+                                {% endif %}
+                                <a href="{% pageurl news_page %}">
+                                    <span class="know_more">Leer más</span>
+                                </a>
                             </div>
                         </div>
                     </a>

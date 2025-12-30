@@ -1,17 +1,70 @@
-{% extends "cms/base.html" %}
-{% load wagtailcore_tags %}
+{% extends "madmusic/base.html" %}
+{% load wagtailcore_tags wagtailimages_tags static %}
+
+{% block title %}{{ page.title }} - Noticias - Madmusic - ICCMU{% endblock %}
 
 {% block content %}
-<h1>{{ page.title }}</h1>
-{% if page.date %}
-    <p><strong>Fecha:</strong> {{ page.date }}</p>
-{% endif %}
-{% if page.featured_image %}
-    <img src="{{ page.featured_image.url }}" alt="{{ page.featured_image.title }}">
-{% endif %}
-{% if page.intro %}
-    <p><em>{{ page.intro }}</em></p>
-{% endif %}
-<div>{{ page.body|richtext }}</div>
+<div id="main" style="margin-top: 0; padding-top: 20px; overflow: visible;">
+    <section id="page" style="overflow: visible;">
+        <div class="container" style="overflow: visible;">
+            <div class="row" style="overflow: visible;">
+                <!-- Contenido principal -->
+                <div class="col-md-10 col-md-offset-1">
+                    <section id="tools">
+                        <article class="pagina-detalle">
+                            {% if page.title %}
+                            <h1 class="title" style="margin-bottom: 30px; font-size: 32px; font-weight: 700; color: #333;">
+                                <span style="color: #d11922;">{{ page.title }}</span>
+                            </h1>
+                            {% endif %}
+                            
+                            {% if page.date %}
+                            <p style="margin-bottom: 20px; color: #999; font-size: 14px;">
+                                <strong>Fecha de publicación:</strong> {{ page.date|date:"d \d\e F \d\e Y" }}
+                            </p>
+                            {% endif %}
+                            
+                            {% if page.featured_image %}
+                            <div style="margin-bottom: 30px;">
+                                {% image page.featured_image width-800 class="img-responsive" style="max-width: 100%; height: auto; border-radius: 4px;" %}
+                            </div>
+                            {% endif %}
+                            
+                            {% if page.intro %}
+                            <div class="intro" style="margin-bottom: 25px; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #d11922; font-size: 16px; color: #666; font-style: italic;">
+                                {{ page.intro }}
+                            </div>
+                            {% endif %}
+                            
+                            <div class="pagina-cuerpo content">
+                                {% if page.body %}
+                                    {# Envolver en div.richtext para aislar estilos de Wagtail #}
+                                    <div class="richtext">
+                                        {{ page.body|richtext }}
+                                    </div>
+                                {% else %}
+                                    <p>Esta noticia aún no tiene contenido.</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+                                <a href="/madmusic/noticias/" style="color: #d11922; text-decoration: none;">
+                                    ← Volver a Noticias
+                                </a>
+                            </div>
+                        </article>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    /* Estilos para el contenedor de la página */
+    .pagina-cuerpo {
+        margin-top: 20px;
+    }
+</style>
 {% endblock %}
 

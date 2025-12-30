@@ -37,6 +37,7 @@ ALLOWED_HOSTS = [
     "test.iccmu.es",
     "localhost",
     "127.0.0.1",
+    "testserver",  # Para tests de Django
 ]
 
 
@@ -100,6 +101,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "cms.context_processors.wagtail_menu_context",
             ],
         },
     },
@@ -187,4 +189,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Wagtail settings
 WAGTAIL_SITE_NAME = "ICCMU CMS"
-WAGTAILADMIN_BASE_URL = "http://madmusic.iccmu.es"
+# En desarrollo, usar 127.0.0.1:8000; en producción usar el dominio real
+WAGTAILADMIN_BASE_URL = os.environ.get("WAGTAILADMIN_BASE_URL", "http://127.0.0.1:8000")
+
+# Configuración de Wagtail para imágenes
+WAGTAILIMAGES_IMAGE_MODEL = "wagtailimages.Image"
