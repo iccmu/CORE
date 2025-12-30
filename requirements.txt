@@ -9,3 +9,4 @@ django-storages[azure]>=1.14.0
 
 
 
+

@@ -113,3 +113,4 @@ python manage.py shell -c "from core.models import Pagina; print(Pagina.objects.
 
 
 
+
