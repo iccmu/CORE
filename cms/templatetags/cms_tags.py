@@ -21,15 +21,30 @@ def get_menu_items(parent_page, current_page=None, max_depth=2, include_children
     menu_items = []
     
     # Obtener hijos directos que están publicados y marcados para menú
-    children = parent_page.get_children().live().filter(show_in_menus=True).specific()
+    children = parent_page.get_children().live().filter(show_in_menus=True)
     
     for child in children:
+        # Usar Page base para is_ancestor_of, pero specific() para el resto
+        child_specific = child.specific
+        
+        # Verificar si es ancestro: current_page está debajo de child en el árbol
+        is_ancestor = False
+        if current_page:
+            try:
+                # Obtener Page base para la comparación
+                child_page = Page.objects.get(id=child.id)
+                current_page_base = Page.objects.get(id=current_page.id) if hasattr(current_page, 'id') else None
+                if current_page_base:
+                    is_ancestor = child_page.is_ancestor_of(current_page_base)
+            except:
+                pass
+        
         item = {
-            'page': child,
-            'title': child.title,
-            'url': child.url,
+            'page': child_specific,
+            'title': child_specific.title,
+            'url': child_specific.url,
             'is_current': current_page and (child.id == current_page.id),
-            'is_ancestor': current_page and child.is_ancestor_of(current_page),
+            'is_ancestor': is_ancestor,
             'children': [],
         }
         
@@ -37,14 +52,16 @@ def get_menu_items(parent_page, current_page=None, max_depth=2, include_children
         # Para submenús, incluimos todos los hijos aunque no tengan show_in_menus=True
         if max_depth > 1:
             # Obtener todos los hijos vivos para submenús
-            sub_children = child.get_children().live().specific()
+            sub_children = child.get_children().live()
             for sub_child in sub_children:
+                sub_child_specific = sub_child.specific
+                
                 sub_item = {
-                    'page': sub_child,
-                    'title': sub_child.title,
-                    'url': sub_child.url,
+                    'page': sub_child_specific,
+                    'title': sub_child_specific.title,
+                    'url': sub_child_specific.url,
                     'is_current': current_page and (sub_child.id == current_page.id),
-                    'is_ancestor': current_page and sub_child.is_ancestor_of(current_page),
+                    'is_ancestor': False,  # Los hijos de nivel 2 no tienen ancestros en este menú
                     'children': [],
                 }
                 # Si hay más profundidad, obtener nietos también

@@ -161,7 +161,24 @@
         /* Posicionar el menú debajo del carousel */
         #header {
             position: relative;
-            height: 490px; /* Altura del carousel + menú */
+            min-height: 490px; /* Altura mínima del carousel + menú */
+            overflow: visible !important;
+        }
+        
+        /* Contenedor para menú + submenú */
+        #header .menu-section-wrapper {
+            position: relative;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        /* Asegurar que el wrapper no interfiera con los eventos */
+        .menu-section-wrapper {
+            pointer-events: none;
+        }
+        
+        .menu-section-wrapper > * {
+            pointer-events: auto;
         }
         
         /* Carousel ocupa los primeros 430px */
@@ -182,26 +199,214 @@
         }
         
         /* Menú debajo del carousel */
-        #header #menu_principal_container {
-            position: absolute !important;
-            bottom: 0 !important;
-            top: 430px !important;
-            left: 0 !important;
-            right: 0 !important;
-            z-index: 100 !important;
+        #header .menu-principal-container {
+            position: relative !important;
+            width: 100%;
+            z-index: 98 !important;
             margin-top: 0 !important;
-            height: 60px !important;
+            margin-bottom: 0 !important;
+            background-color: #ffffff;
+            border-bottom: none !important;
+            overflow: visible !important;
+            padding-bottom: 0 !important;
         }
         
-        /* Submenu debajo del menú principal */
-        #header .submenu_menu_principal {
-            position: absolute !important;
-            bottom: 0 !important;
-            top: 430px !important;
+        #header .menu-principal-container .container {
+            max-width: 100% !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+        
+        /* Submenu debajo del menú principal - oculto por defecto */
+        .submenu_menu_principal {
+            position: relative !important;
+            width: 100%;
             left: 0 !important;
             right: 0 !important;
-            z-index: 99 !important;
-            height: 60px !important;
+            z-index: 150 !important;
+            background-color: #c1272d !important;
+            max-height: 0 !important;
+            opacity: 0 !important;
+            transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease !important;
+            padding: 0 !important;
+            margin-top: 0 !important;
+            overflow: hidden !important;
+            pointer-events: auto !important;
+            border-top: 1px solid #e0e0e0 !important;
+        }
+        
+        /* Crear un "puente" invisible arriba del submenú para facilitar navegación */
+        .submenu_menu_principal::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: transparent;
+            pointer-events: auto;
+            z-index: 151;
+        }
+        
+        /* Ajustes para menú principal - SIEMPRE EN UNA LÍNEA */
+        #menu_principal {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 0 !important;
+            overflow: visible !important;
+        }
+        
+        #menu_principal .menu-item {
+            flex: 0 1 auto !important;
+            white-space: nowrap !important;
+            text-align: center !important;
+            min-width: 0 !important;
+        }
+        
+        #menu_principal .menu-item > a {
+            padding: 18px 8px !important;
+            font-size: 11.5px !important;
+            display: block !important;
+            letter-spacing: -0.3px !important;
+        }
+        
+        /* Pantallas muy grandes pueden tener más espacio */
+        @media (min-width: 1600px) {
+            #menu_principal .menu-item > a {
+                padding: 18px 12px !important;
+                font-size: 12.5px !important;
+                letter-spacing: 0px !important;
+            }
+        }
+        
+        /* Pantallas medianas */
+        @media (min-width: 1400px) and (max-width: 1599px) {
+            #menu_principal .menu-item > a {
+                padding: 18px 10px !important;
+                font-size: 12px !important;
+                letter-spacing: -0.2px !important;
+            }
+        }
+        
+        /* Pantallas pequeñas - aún más compacto */
+        @media (max-width: 1399px) and (min-width: 1201px) {
+            #menu_principal .menu-item > a {
+                padding: 18px 6px !important;
+                font-size: 10.5px !important;
+                letter-spacing: -0.4px !important;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            #menu_principal .menu-item > a {
+                padding: 18px 4px !important;
+                font-size: 10px !important;
+                letter-spacing: -0.5px !important;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            #menu_principal .menu-item > a {
+                padding: 18px 3px !important;
+                font-size: 9px !important;
+                letter-spacing: -0.5px !important;
+            }
+        }
+        
+        /* === ESTILOS PARA SUBMENÚ EN BARRA ROJA === */
+        
+        /* Ocultar submenús dentro del menú principal */
+        #menu_principal .sub-menu {
+            display: none !important;
+        }
+        
+        /* Mostrar barra roja con animación slide down */
+        .submenu_menu_principal.hover-active,
+        .submenu_menu_principal.page-active {
+            max-height: 200px !important;
+            opacity: 1 !important;
+            padding: 15px 0 !important;
+            pointer-events: auto !important;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1) !important;
+            z-index: 200 !important;
+        }
+        
+        /* Asegurar que los enlaces del submenú rojo sean clickeables */
+        .submenu_menu_principal .menu-item a {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+            display: inline-block !important;
+            position: relative !important;
+            z-index: 201 !important;
+        }
+        
+        /* Ocultar barra roja cuando no hay hover ni página activa */
+        .submenu_menu_principal:not(.hover-active):not(.page-active) {
+            max-height: 0 !important;
+            opacity: 0 !important;
+            padding: 0 !important;
+            pointer-events: auto !important;
+        }
+        
+        /* Ocultar el puente cuando el submenú no está activo */
+        .submenu_menu_principal:not(.hover-active):not(.page-active)::before {
+            display: none;
+        }
+        
+        /* Items del submenú en barra roja */
+        .submenu_menu_principal .menu {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 20px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            list-style: none !important;
+            justify-content: center !important;
+        }
+        
+        .submenu_menu_principal .menu-item {
+            margin: 0 !important;
+            flex: 0 0 auto !important;
+        }
+        
+        .submenu_menu_principal .menu-item a {
+            color: #ffffff !important;
+            text-decoration: none !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+            font-size: 12px !important;
+            letter-spacing: 0.5px !important;
+            transition: opacity 0.2s ease !important;
+            white-space: nowrap !important;
+        }
+        
+        .submenu_menu_principal .menu-item a:hover {
+            opacity: 0.8 !important;
+        }
+        
+        .submenu_menu_principal .menu-item.active a {
+            text-decoration: underline !important;
+        }
+        
+        /* Responsive para barra roja */
+        @media (max-width: 1200px) {
+            .submenu_menu_principal .menu {
+                gap: 15px !important;
+            }
+            .submenu_menu_principal .menu-item a {
+                font-size: 11px !important;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .submenu_menu_principal .menu {
+                gap: 10px !important;
+            }
+            .submenu_menu_principal .menu-item a {
+                font-size: 10px !important;
+            }
         }
     </style>
     
@@ -262,8 +467,6 @@
             </div>
         </div>
         
-        <div class="submenu_menu_principal" style="pointer-events: none;"></div>
-        
         <div class="menu_mobile">
             <div class="container">
                 <a class="mobile_user" href="/madmusic/">
@@ -286,37 +489,54 @@
             </div>
         </div>
         
-        <div class="menu-principal-container" id="menu_principal_container" style="pointer-events: auto; position: relative; z-index: 50;">
-            <div class="container">
-                <ul class="menu" id="menu_principal" style="pointer-events: auto;">
-                    {% if wagtail_menu_items %}
-                        {% for item in wagtail_menu_items %}
-                        <li class="menu-item {% if item.children %}menu-item-has-children{% endif %} {% if item.is_current or item.is_ancestor %}active{% endif %}">
-                            <a href="{{ item.url }}">{{ item.title }}</a>
-                            {% if item.children %}
-                            <ul class="sub-menu">
-                                {% for child in item.children %}
-                                <li class="menu-item {% if child.is_current %}active{% endif %}">
-                                    <a href="{{ child.url }}">{{ child.title }}</a>
-                                    {% if child.children %}
-                                    <ul class="sub-menu">
-                                        {% for grandchild in child.children %}
-                                        <li class="menu-item {% if grandchild.is_current %}active{% endif %}">
-                                            <a href="{{ grandchild.url }}">{{ grandchild.title }}</a>
-                                        </li>
-                                        {% endfor %}
-                                    </ul>
-                                    {% endif %}
-                                </li>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
-                        </li>
-                        {% endfor %}
-                    {% else %}
-                        <li class="menu-item"><a href="/madmusic/">INICIO</a></li>
-                    {% endif %}
-                </ul>
+        <!-- Wrapper para Menú + Submenú -->
+        <div class="menu-section-wrapper">
+            <!-- Menú Principal (Nivel 1 - Barra Blanca con Dropdown en Hover) -->
+            <div class="menu-principal-container" id="menu_principal_container" style="pointer-events: auto; position: relative; z-index: 50;">
+                <div class="container">
+                    <ul class="menu" id="menu_principal" style="pointer-events: auto;">
+                        {% if wagtail_primary_menu %}
+                            {% for item in wagtail_primary_menu %}
+                            <li class="menu-item {% if item.children %}menu-item-has-children{% endif %} {% if item.is_current or item.is_ancestor %}active{% endif %}" 
+                                data-has-children="{{ item.children|length|default:0 }}">
+                                <a href="{{ item.url }}">{{ item.title }}</a>
+                                {% if item.children %}
+                                <ul class="sub-menu" style="display: none;">
+                                    {% for child in item.children %}
+                                    <li class="menu-item {% if child.is_current %}active{% endif %}" 
+                                        data-title="{{ child.title }}" 
+                                        data-url="{{ child.url }}">
+                                        <a href="{{ child.url }}">{{ child.title }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="menu-item"><a href="/madmusic/">INICIO</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Submenú (Nivel 2 - Barra Roja) -->
+            <div class="submenu_menu_principal {% if wagtail_secondary_menu %}page-active{% endif %}" 
+                 id="submenu_container" 
+                 style="{% if wagtail_secondary_menu %}pointer-events: auto; background-color: #c1272d; padding: 15px 0; display: block;{% else %}display: none; pointer-events: none;{% endif %}">
+                <div class="container">
+                    <ul class="menu" id="submenu_items" style="pointer-events: auto; display: flex; flex-wrap: wrap; gap: 25px; margin: 0; padding: 0; list-style: none;">
+                        {% if wagtail_secondary_menu %}
+                            {% for item in wagtail_secondary_menu %}
+                            <li class="menu-item {% if item.is_current %}active{% endif %}" style="margin: 0;" data-original="true">
+                                <a href="{{ item.url }}" style="color: #ffffff; text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;">
+                                    {{ item.title }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
         </div>
     </header>
@@ -747,11 +967,187 @@
             pointer-events: auto !important;
             z-index: 50 !important;
         }
-        
-        .submenu_menu_principal {
-            pointer-events: none !important;
-        }
     </style>
+    
+    <!-- JavaScript para hover del menú -->
+    <script>
+    (function() {
+        console.log('🔧 Iniciando script de menú hover...');
+        
+        // Esperar a que el DOM esté listo
+        function initMenuHover() {
+            const submenuContainer = document.getElementById('submenu_container');
+            const submenuItems = document.getElementById('submenu_items');
+            const menuPrincipal = document.getElementById('menu_principal');
+            const menuWrapper = document.querySelector('.menu-section-wrapper');
+            
+            console.log('📋 Elementos encontrados:', {
+                submenuContainer: !!submenuContainer,
+                submenuItems: !!submenuItems,
+                menuPrincipal: !!menuPrincipal,
+                menuWrapper: !!menuWrapper
+            });
+            
+            if (!submenuContainer || !submenuItems || !menuPrincipal) {
+                console.error('❌ No se encontraron los elementos necesarios');
+                return;
+            }
+            
+            // Guardar el contenido original
+            const originalSubmenuHTML = submenuItems.innerHTML;
+            const hasPageActive = submenuContainer.classList.contains('page-active');
+            let hoverTimeout = null;
+            let isOverSubmenu = false;
+            let isOverMenuPrincipal = false;
+            let currentActiveItem = null;
+            
+            console.log('💾 Contenido original guardado, página activa:', hasPageActive);
+            
+            // Función para mostrar submenú
+            function showSubmenu(childItems, menuItem) {
+                console.log('👆 Intentando mostrar submenú con', childItems.length, 'items');
+                
+                if (childItems.length === 0) {
+                    return;
+                }
+                
+                // Si ya es el item activo, no hacer nada
+                if (currentActiveItem === menuItem) {
+                    console.log('⏸️ Ya es el item activo, no cambiar');
+                    return;
+                }
+                
+                // Cancelar timeout si existe
+                if (hoverTimeout) {
+                    clearTimeout(hoverTimeout);
+                    hoverTimeout = null;
+                }
+                
+                // Guardar el item activo actual
+                currentActiveItem = menuItem;
+                
+                // Construir HTML
+                let html = '';
+                childItems.forEach(function(child) {
+                    const title = child.getAttribute('data-title');
+                    const url = child.getAttribute('data-url');
+                    html += '<li class="menu-item" style="margin: 0;">' +
+                            '<a href="' + url + '" style="color: #ffffff; text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">' +
+                            title + '</a></li>';
+                });
+                
+                // Actualizar contenido
+                submenuItems.innerHTML = html;
+                
+                // Agregar clase para activar animación
+                submenuContainer.classList.add('hover-active');
+                console.log('✅ Submenú mostrado');
+            }
+            
+            // Función para ocultar submenú
+            function hideSubmenu(immediate) {
+                console.log('🤔 Intentando ocultar submenú...', immediate ? '(inmediato)' : '(con delay)');
+                
+                // Cancelar timeout previo
+                if (hoverTimeout) {
+                    clearTimeout(hoverTimeout);
+                    hoverTimeout = null;
+                }
+                
+                const delay = immediate ? 0 : 250;
+                
+                hoverTimeout = setTimeout(function() {
+                    // Solo ocultar si NO estamos sobre el menú principal NI sobre el submenú
+                    if (!isOverMenuPrincipal && !isOverSubmenu) {
+                        console.log('👋 Ocultando submenú');
+                        submenuContainer.classList.remove('hover-active');
+                        currentActiveItem = null;
+                        
+                        if (hasPageActive) {
+                            // Restaurar original después de la animación
+                            setTimeout(function() {
+                                if (!submenuContainer.classList.contains('hover-active')) {
+                                    submenuItems.innerHTML = originalSubmenuHTML;
+                                }
+                            }, 300);
+                        }
+                    } else {
+                        console.log('⏸️ Aún sobre menú o submenú, no ocultar');
+                    }
+                }, delay);
+            }
+            
+            // Agregar eventos a cada item del menú principal
+            const menuItems = menuPrincipal.querySelectorAll(':scope > .menu-item');
+            console.log('🔍 Items del menú principal encontrados:', menuItems.length);
+            
+            menuItems.forEach(function(menuItem, idx) {
+                const hasChildren = menuItem.getAttribute('data-has-children');
+                
+                if (hasChildren && parseInt(hasChildren) > 0) {
+                    console.log('➕ Item', idx, 'tiene', hasChildren, 'hijos');
+                    
+                    menuItem.addEventListener('mouseenter', function(e) {
+                        console.log('🖱️ Mouse enter en item', idx);
+                        const subMenu = this.querySelector('.sub-menu');
+                        if (subMenu) {
+                            const childItems = subMenu.querySelectorAll('li[data-title]');
+                            // Solo cambiar si NO estamos sobre el submenú o si es un item diferente
+                            if (!isOverSubmenu || currentActiveItem !== menuItem) {
+                                showSubmenu(childItems, menuItem);
+                            }
+                        }
+                    });
+                }
+            });
+            
+            // Eventos en el menú principal (área completa)
+            menuPrincipal.addEventListener('mouseenter', function() {
+                console.log('📍 Mouse ENTER en menú principal');
+                isOverMenuPrincipal = true;
+                if (hoverTimeout) {
+                    clearTimeout(hoverTimeout);
+                    hoverTimeout = null;
+                }
+            });
+            
+            menuPrincipal.addEventListener('mouseleave', function(e) {
+                console.log('📍 Mouse LEAVE de menú principal');
+                isOverMenuPrincipal = false;
+                
+                // Siempre dar tiempo para que el mouse llegue al submenú
+                hideSubmenu(false);
+            });
+            
+            // Eventos en la barra roja (submenú)
+            submenuContainer.addEventListener('mouseenter', function() {
+                console.log('📍 Mouse ENTER en barra roja');
+                isOverSubmenu = true;
+                if (hoverTimeout) {
+                    clearTimeout(hoverTimeout);
+                    hoverTimeout = null;
+                }
+            });
+            
+            submenuContainer.addEventListener('mouseleave', function(e) {
+                console.log('📍 Mouse LEAVE de barra roja');
+                isOverSubmenu = false;
+                
+                // Dar tiempo para que el mouse pueda volver al menú o ir a otro lugar
+                hideSubmenu(false);
+            });
+            
+            console.log('✅ Script de menú hover inicializado correctamente');
+        }
+        
+        // Inicializar cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMenuHover);
+        } else {
+            initMenuHover();
+        }
+    })();
+    </script>
 </body>
 </html>
 

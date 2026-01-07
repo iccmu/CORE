@@ -79,6 +79,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "proyectos.middleware.DomainUrlConfMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
+    "proyectos.error_middleware.Custom404Middleware",
 ]
 
 ROOT_URLCONF = "proyectos.urls_root"

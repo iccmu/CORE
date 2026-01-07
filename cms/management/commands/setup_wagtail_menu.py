@@ -157,3 +157,5 @@ class Command(BaseCommand):
         self.stdout.write("Puedes editar 'show_in_menus' desde el admin de Wagtail en cada página.")
         self.stdout.write("=" * 80)
 
+
+
