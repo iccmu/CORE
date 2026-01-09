@@ -408,6 +408,19 @@
                 font-size: 10px !important;
             }
         }
+        
+        /* Animación de fade para el contenido del submenú */
+        #submenu_items {
+            transition: opacity 0.2s ease-in-out !important;
+        }
+        
+        #submenu_items.fade-out {
+            opacity: 0 !important;
+        }
+        
+        #submenu_items.fade-in {
+            opacity: 1 !important;
+        }
     </style>
     
     <header class="site-header" id="header">
@@ -1022,9 +1035,6 @@
                     hoverTimeout = null;
                 }
                 
-                // Guardar el item activo actual
-                currentActiveItem = menuItem;
-                
                 // Construir HTML
                 let html = '';
                 childItems.forEach(function(child) {
@@ -1035,10 +1045,32 @@
                             title + '</a></li>';
                 });
                 
-                // Actualizar contenido
-                submenuItems.innerHTML = html;
+                // Si ya hay contenido visible, hacer fade-out antes de cambiar
+                if (currentActiveItem && submenuContainer.classList.contains('hover-active')) {
+                    submenuItems.classList.add('fade-out');
+                    
+                    setTimeout(function() {
+                        // Actualizar contenido
+                        submenuItems.innerHTML = html;
+                        submenuItems.classList.remove('fade-out');
+                        submenuItems.classList.add('fade-in');
+                        
+                        // Guardar el nuevo item activo
+                        currentActiveItem = menuItem;
+                        
+                        // Remover fade-in después de la animación
+                        setTimeout(function() {
+                            submenuItems.classList.remove('fade-in');
+                        }, 200);
+                    }, 200);
+                } else {
+                    // Primera vez o no hay contenido previo, mostrar directamente
+                    submenuItems.innerHTML = html;
+                    currentActiveItem = menuItem;
+                    submenuContainer.classList.add('hover-active');
+                }
                 
-                // Agregar hover-active para mostrar el submenú
+                // Asegurar que hover-active esté presente
                 submenuContainer.classList.add('hover-active');
                 console.log('✅ Submenú mostrado');
             }
