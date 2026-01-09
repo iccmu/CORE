@@ -1,0 +1,276 @@
+/**
+ * Estilos para acordeones Bootstrap
+ * Replicados del sitio original madmusic.iccmu.es
+ */
+
+/* === ESTILOS GENERALES DE ACORDEONES === */
+
+.accordion-group-wrapper {
+    margin: 30px 0;
+}
+
+.accordion-group-heading {
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 700;
+    font-size: 24px;
+}
+
+/* Panel Group */
+.panel-group {
+    margin-bottom: 20px;
+}
+
+.panel-group .panel {
+    margin-bottom: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.panel-group .panel + .panel {
+    margin-top: 5px;
+}
+
+/* === PANEL BÁSICO === */
+
+.panel {
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+.panel-default {
+    border-color: #ddd;
+}
+
+/* === PANEL HEADING === */
+
+.panel-heading {
+    padding: 0;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+}
+
+.panel-default > .panel-heading {
+    color: #333;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+}
+
+/* === PANEL TITLE === */
+
+.panel-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 16px;
+    color: inherit;
+}
+
+.panel-title > a,
+.panel-title > a:hover,
+.panel-title > a:focus {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+    padding: 15px 20px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.panel-title > a:hover {
+    background-color: #e8e8e8;
+}
+
+/* Icono de flecha para indicar estado colapsado/expandido */
+.panel-title > a:after {
+    content: '\f078'; /* FontAwesome chevron-down */
+    font-family: 'FontAwesome';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s ease;
+}
+
+.panel-title > a.collapsed:after {
+    transform: translateY(-50%) rotate(-90deg);
+}
+
+.panel-title > a:not(.collapsed):after {
+    transform: translateY(-50%) rotate(0deg);
+}
+
+/* === PANEL COLLAPSE === */
+
+.panel-collapse {
+    overflow: hidden;
+    transition: height 0.35s ease;
+}
+
+.panel-collapse.in {
+    height: auto;
+}
+
+.collapse {
+    display: none;
+}
+
+.collapse.in {
+    display: block;
+}
+
+/* === PANEL BODY === */
+
+.panel-body {
+    padding: 20px;
+    background-color: #fff;
+}
+
+.panel-body p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.panel-body p:last-child {
+    margin-bottom: 0;
+}
+
+.panel-body ul,
+.panel-body ol {
+    margin-bottom: 15px;
+    padding-left: 25px;
+}
+
+.panel-body li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.panel-body img {
+    max-width: 100%;
+    height: auto;
+    margin: 15px 0;
+}
+
+.panel-body a {
+    color: #d11922;
+    text-decoration: none;
+}
+
+.panel-body a:hover {
+    text-decoration: underline;
+}
+
+.panel-body blockquote {
+    border-left: 4px solid #d11922;
+    padding-left: 20px;
+    margin: 25px 0;
+    font-style: italic;
+    color: #555;
+}
+
+.panel-body hr {
+    margin: 25px 0;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+.panel-body strong,
+.panel-body b {
+    font-weight: 700;
+}
+
+.panel-body em,
+.panel-body i {
+    font-style: italic;
+}
+
+/* === ESTILOS ESPECÍFICOS PARA TÍTULOS DENTRO DEL BODY === */
+
+.panel-body h2,
+.panel-body h3,
+.panel-body h4,
+.panel-body h5,
+.panel-body h6 {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-weight: 700;
+    color: #333;
+}
+
+.panel-body h2 { font-size: 24px; }
+.panel-body h3 { font-size: 20px; }
+.panel-body h4 { font-size: 18px; }
+.panel-body h5 { font-size: 16px; }
+.panel-body h6 { font-size: 14px; }
+
+/* === RESPONSIVE === */
+
+@media (max-width: 768px) {
+    .panel-title > a {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+    
+    .panel-body {
+        padding: 15px;
+    }
+    
+    .panel-title > a:after {
+        right: 15px;
+    }
+}
+
+/* === ANIMACIONES === */
+
+.panel-collapse {
+    -webkit-transition: height 0.35s ease;
+    -moz-transition: height 0.35s ease;
+    -ms-transition: height 0.35s ease;
+    -o-transition: height 0.35s ease;
+    transition: height 0.35s ease;
+}
+
+/* === ACCESIBILIDAD === */
+
+.panel-title > a:focus {
+    outline: 2px solid #d11922;
+    outline-offset: 2px;
+}
+
+/* === VARIANTES DE COLOR === */
+
+/* Panel destacado */
+.panel-primary > .panel-heading {
+    background-color: #d11922;
+    border-color: #d11922;
+    color: #fff;
+}
+
+.panel-primary > .panel-heading .panel-title > a {
+    color: #fff;
+}
+
+.panel-primary > .panel-heading .panel-title > a:hover {
+    background-color: #b01419;
+}
+
+/* === ESTILOS ADICIONALES PARA COMPATIBILIDAD === */
+
+/* Asegurar que los acordeones funcionen con Bootstrap 3 */
+.collapsing {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    -webkit-transition-property: height, visibility;
+    transition-property: height, visibility;
+    -webkit-transition-duration: 0.35s;
+    transition-duration: 0.35s;
+    -webkit-transition-timing-function: ease;
+    transition-timing-function: ease;
+}

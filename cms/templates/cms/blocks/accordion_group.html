@@ -1,0 +1,36 @@
+{% load wagtailcore_tags %}
+{# Template para un grupo de acordeones #}
+{% with group_id=value.id|default:forloop.counter0 %}
+<div class="accordion-group-wrapper" style="margin: 30px 0;">
+    {% if value.heading %}
+    <h3 class="accordion-group-heading" style="margin-bottom: 20px; color: #333; font-weight: 700;">
+        {{ value.heading }}
+    </h3>
+    {% endif %}
+    
+    <div class="panel-group" id="accordion-group-{{ group_id }}" data-allow-multiple="{{ value.allow_multiple_open }}">
+        {% for accordion in value.accordions %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" 
+                       data-toggle="collapse" 
+                       {% if not value.allow_multiple_open %}
+                       data-parent="#accordion-group-{{ group_id }}"
+                       {% endif %}
+                       href="#accordion-{{ group_id }}-{{ forloop.counter }}">
+                        {{ accordion.title }}
+                    </a>
+                </h4>
+            </div>
+            <div id="accordion-{{ group_id }}-{{ forloop.counter }}" 
+                 class="panel-collapse collapse {% if forloop.first and value.first_accordion_open %}in{% endif %}">
+                <div class="panel-body">
+                    {{ accordion.content|richtext }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endwith %}

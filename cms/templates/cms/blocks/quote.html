@@ -1,0 +1,11 @@
+{# Template para cita destacada #}
+<blockquote class="custom-quote" style="border-left: 4px solid #d11922; padding-left: 20px; margin: 25px 0; font-style: italic; color: #555;">
+    <p style="font-size: 16px; line-height: 1.6; margin-bottom: 10px;">
+        {{ self.quote }}
+    </p>
+    {% if self.attribution %}
+    <footer style="font-size: 14px; color: #999; font-style: normal;">
+        — {{ self.attribution }}
+    </footer>
+    {% endif %}
+</blockquote>

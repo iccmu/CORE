@@ -1,8 +1,11 @@
 from django.db import models
 from wagtail.models import Page
-from wagtail.fields import RichTextField
+from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel
 from wagtail.images.models import Image
+from wagtail import blocks
+
+from .blocks import AccordionGroupBlock, ImageWithCaptionBlock, QuoteBlock
 
 
 class HomePage(Page):
@@ -24,10 +27,37 @@ class HomePage(Page):
 
 
 class StandardPage(Page):
-    """Página estándar con contenido enriquecido"""
-    body = RichTextField()
+    """Página estándar con contenido enriquecido y bloques estructurados"""
+    
+    # Introducción en texto enriquecido simple
+    intro = RichTextField(blank=True, help_text="Texto de introducción (opcional)")
+    
+    # Contenido principal usando StreamField para flexibilidad
+    body = StreamField([
+        ('paragraph', blocks.RichTextBlock(
+            features=[
+                'h2', 'h3', 'h4', 'h5', 'h6',
+                'bold', 'italic',
+                'ol', 'ul',
+                'link', 'document-link',
+                'image', 'embed',
+                'hr',
+                'blockquote',
+            ],
+            label='Párrafo',
+            icon='doc-full'
+        )),
+        ('accordion_group', AccordionGroupBlock()),
+        ('image', ImageWithCaptionBlock()),
+        ('quote', QuoteBlock()),
+        ('raw_html', blocks.RawHTMLBlock(
+            help_text='HTML crudo - usar con precaución',
+            icon='code'
+        )),
+    ], blank=True, use_json_field=True)
 
     content_panels = Page.content_panels + [
+        FieldPanel("intro"),
         FieldPanel("body"),
     ]
 

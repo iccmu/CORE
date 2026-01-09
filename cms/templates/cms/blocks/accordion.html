@@ -1,0 +1,20 @@
+{% load wagtailcore_tags %}
+{# Template para un acordeón individual #}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a class="collapsed" 
+               data-toggle="collapse" 
+               data-parent="#accordion-group-{{ parent_id }}" 
+               href="#accordion-{{ block_id }}">
+                {{ self.title }}
+            </a>
+        </h4>
+    </div>
+    <div id="accordion-{{ block_id }}" 
+         class="panel-collapse collapse {% if forloop.first and first_open %}in{% endif %}">
+        <div class="panel-body">
+            {{ self.content|richtext }}
+        </div>
+    </div>
+</div>

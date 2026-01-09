@@ -1,0 +1,13 @@
+{% load wagtailimages_tags %}
+{# Template para imagen con caption #}
+<figure class="image-with-caption" style="margin: 20px 0;">
+    {% image self.image width-800 as img %}
+    <img src="{{ img.url }}" 
+         alt="{{ self.alt_text|default:self.caption }}" 
+         style="max-width: 100%; height: auto; display: block;">
+    {% if self.caption %}
+    <figcaption style="margin-top: 10px; font-style: italic; color: #666; font-size: 14px;">
+        {{ self.caption }}
+    </figcaption>
+    {% endif %}
+</figure>

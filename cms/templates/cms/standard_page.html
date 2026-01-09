@@ -19,10 +19,20 @@
                             {% endif %}
                             
                             <div class="pagina-cuerpo content">
+                                {% if page.intro %}
+                                    <div class="page-intro richtext" style="margin-bottom: 30px;">
+                                        {{ page.intro|richtext }}
+                                    </div>
+                                {% endif %}
+                                
                                 {% if page.body %}
-                                    {# Envolver en div.richtext para aislar estilos de Wagtail #}
-                                    <div class="richtext">
-                                        {{ page.body|richtext }}
+                                    {# Renderizar el StreamField con todos sus bloques #}
+                                    <div class="page-body">
+                                        {% for block in page.body %}
+                                            <div class="block-{{ block.block_type }}">
+                                                {% include_block block %}
+                                            </div>
+                                        {% endfor %}
                                     </div>
                                 {% else %}
                                     <p>Esta página aún no tiene contenido. Puedes editarla desde el <a href="/admin/">admin de Wagtail</a>.</p>
