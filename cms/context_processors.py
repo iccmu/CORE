@@ -26,12 +26,22 @@ def wagtail_menu_context(request):
             
             # Limpiar path (ej: /madmusic/equipo/ -> equipo)
             path = request.path.strip('/')
-            if path.startswith('madmusic/'):
-                slug = path.replace('madmusic/', '').strip('/')
+            
+            # Manejar rutas de madmusic
+            if path == 'madmusic' or path.startswith('madmusic/'):
+                # Extraer el slug después de 'madmusic/'
+                if path == 'madmusic':
+                    slug = ''
+                else:
+                    slug = path.replace('madmusic/', '', 1).strip('/')
                 
                 # Buscar página por slug
                 home_page = HomePage.objects.filter(slug='madmusic-home').first()
-                if home_page and slug:
+                
+                # Si el slug está vacío, estamos en la home de madmusic
+                if home_page and not slug:
+                    current_page = home_page
+                elif home_page and slug:
                     # Buscar por el último segmento del slug
                     slug_part = slug.split('/')[-1] if '/' in slug else slug
                     

@@ -522,8 +522,7 @@
             
             <!-- Submenú (Nivel 2 - Barra Roja) -->
             <div class="submenu_menu_principal {% if wagtail_secondary_menu %}page-active{% endif %}" 
-                 id="submenu_container" 
-                 style="{% if wagtail_secondary_menu %}pointer-events: auto; background-color: #c1272d; padding: 15px 0; display: block;{% else %}display: none; pointer-events: none;{% endif %}">
+                 id="submenu_container">
                 <div class="container">
                     <ul class="menu" id="submenu_items" style="pointer-events: auto; display: flex; flex-wrap: wrap; gap: 25px; margin: 0; padding: 0; list-style: none;">
                         {% if wagtail_secondary_menu %}
@@ -993,15 +992,15 @@
                 return;
             }
             
-            // Guardar el contenido original
-            const originalSubmenuHTML = submenuItems.innerHTML;
-            const hasPageActive = submenuContainer.classList.contains('page-active');
+            // Forzar que el menú funcione igual en todas las páginas (solo hover)
+            submenuContainer.classList.remove('page-active');
+            
             let hoverTimeout = null;
             let isOverSubmenu = false;
             let isOverMenuPrincipal = false;
             let currentActiveItem = null;
             
-            console.log('💾 Contenido original guardado, página activa:', hasPageActive);
+            console.log('💾 Menú inicializado (modo hover en todas las páginas)');
             
             // Función para mostrar submenú
             function showSubmenu(childItems, menuItem) {
@@ -1039,7 +1038,7 @@
                 // Actualizar contenido
                 submenuItems.innerHTML = html;
                 
-                // Agregar clase para activar animación
+                // Agregar hover-active para mostrar el submenú
                 submenuContainer.classList.add('hover-active');
                 console.log('✅ Submenú mostrado');
             }
@@ -1062,15 +1061,6 @@
                         console.log('👋 Ocultando submenú');
                         submenuContainer.classList.remove('hover-active');
                         currentActiveItem = null;
-                        
-                        if (hasPageActive) {
-                            // Restaurar original después de la animación
-                            setTimeout(function() {
-                                if (!submenuContainer.classList.contains('hover-active')) {
-                                    submenuItems.innerHTML = originalSubmenuHTML;
-                                }
-                            }, 300);
-                        }
                     } else {
                         console.log('⏸️ Aún sobre menú o submenú, no ocultar');
                     }
@@ -1084,21 +1074,30 @@
             menuItems.forEach(function(menuItem, idx) {
                 const hasChildren = menuItem.getAttribute('data-has-children');
                 
-                if (hasChildren && parseInt(hasChildren) > 0) {
-                    console.log('➕ Item', idx, 'tiene', hasChildren, 'hijos');
+                menuItem.addEventListener('mouseenter', function(e) {
+                    // Cancelar timeout pendiente
+                    if (hoverTimeout) {
+                        clearTimeout(hoverTimeout);
+                        hoverTimeout = null;
+                    }
                     
-                    menuItem.addEventListener('mouseenter', function(e) {
-                        console.log('🖱️ Mouse enter en item', idx);
+                    if (hasChildren && parseInt(hasChildren) > 0) {
+                        console.log('🖱️ Mouse enter en item con hijos', idx);
                         const subMenu = this.querySelector('.sub-menu');
                         if (subMenu) {
                             const childItems = subMenu.querySelectorAll('li[data-title]');
-                            // Solo cambiar si NO estamos sobre el submenú o si es un item diferente
                             if (!isOverSubmenu || currentActiveItem !== menuItem) {
                                 showSubmenu(childItems, menuItem);
                             }
                         }
-                    });
-                }
+                    } else {
+                        console.log('🖱️ Mouse enter en item SIN hijos', idx);
+                        // Item sin hijos: ocultar inmediatamente
+                        submenuContainer.classList.remove('hover-active');
+                        currentActiveItem = null;
+                        console.log('👋 Submenú ocultado');
+                    }
+                });
             });
             
             // Eventos en el menú principal (área completa)

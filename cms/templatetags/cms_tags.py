@@ -35,8 +35,13 @@ def get_menu_items(parent_page, current_page=None, max_depth=2, include_children
                 child_page = Page.objects.get(id=child.id)
                 current_page_base = Page.objects.get(id=current_page.id) if hasattr(current_page, 'id') else None
                 if current_page_base:
-                    is_ancestor = child_page.is_ancestor_of(current_page_base)
-            except:
+                    # En Wagtail, una página es ancestro si el path de la página actual empieza con el path del ancestro
+                    # y no son la misma página
+                    is_ancestor = (
+                        current_page_base.path.startswith(child_page.path) and 
+                        current_page_base.id != child_page.id
+                    )
+            except Exception:
                 pass
         
         item = {
