@@ -1,0 +1,120 @@
+# GitHub Actions Workflow for Static Site Backup
+# 
+# To enable:
+# 1. Rename this file to: .github/workflows/static-backup.yml
+# 2. Configure secrets in GitHub: Settings > Secrets > Actions
+#    - AZURE_ACCOUNT_NAME (optional)
+#    - AZURE_ACCOUNT_KEY (optional)
+#    - DATABASE_URL (if using remote database)
+# 3. Adjust site hostname and schedule as needed
+
+name: Export Static Backup
+
+on:
+  # Scheduled daily at 2 AM UTC
+  schedule:
+    - cron: '0 2 * * *'
+  
+  # Allow manual trigger from Actions tab
+  workflow_dispatch:
+    inputs:
+      site:
+        description: 'Site hostname to export'
+        required: false
+        default: 'madmusic.iccmu.es'
+      upload_azure:
+        description: 'Upload to Azure?'
+        required: false
+        default: 'true'
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Setup database (SQLite for demo)
+        run: |
+          python manage.py migrate --no-input
+        if: ${{ !env.DATABASE_URL }}
+      
+      - name: Collect static files
+        run: |
+          python manage.py collectstatic --no-input
+      
+      - name: Export static site (without Azure)
+        if: ${{ !secrets.AZURE_ACCOUNT_NAME || github.event.inputs.upload_azure == 'false' }}
+        run: |
+          python manage.py export_static_site \
+            --site=${{ github.event.inputs.site || 'madmusic.iccmu.es' }} \
+            --output=/tmp/export \
+            --zip \
+            --verbose
+      
+      - name: Export static site (with Azure)
+        if: ${{ secrets.AZURE_ACCOUNT_NAME && github.event.inputs.upload_azure != 'false' }}
+        env:
+          AZURE_ACCOUNT_NAME: ${{ secrets.AZURE_ACCOUNT_NAME }}
+          AZURE_ACCOUNT_KEY: ${{ secrets.AZURE_ACCOUNT_KEY }}
+        run: |
+          python manage.py export_static_site \
+            --site=${{ github.event.inputs.site || 'madmusic.iccmu.es' }} \
+            --output=/tmp/export \
+            --zip \
+            --upload-azure \
+            --verbose
+      
+      - name: Upload artifact (GitHub)
+        uses: actions/upload-artifact@v3
+        with:
+          name: static-backup-${{ github.run_number }}
+          path: /tmp/offline-backup-*.zip
+          retention-days: 30
+      
+      - name: Summary
+        run: |
+          echo "## Static Backup Export Complete ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Site**: ${{ github.event.inputs.site || 'madmusic.iccmu.es' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "- **Run**: #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          ZIP_SIZE=$(ls -lh /tmp/offline-backup-*.zip | awk '{print $5}')
+          ZIP_NAME=$(basename /tmp/offline-backup-*.zip)
+          
+          echo "### Backup Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **File**: \`$ZIP_NAME\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Size**: $ZIP_SIZE" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ secrets.AZURE_ACCOUNT_NAME }}" != "" ] && [ "${{ github.event.inputs.upload_azure }}" != "false" ]; then
+            echo "- **Azure**: ✅ Uploaded to blob storage" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Azure**: ⏭️  Skipped" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Download the artifact from the 'Artifacts' section above." >> $GITHUB_STEP_SUMMARY
+
+# Optional: Notify on failure
+# Uncomment and configure if you want Slack/email notifications
+#
+#      - name: Notify on failure
+#        if: failure()
+#        uses: 8398a7/action-slack@v3
+#        with:
+#          status: ${{ job.status }}
+#          text: 'Static backup export failed!'
+#          webhook_url: ${{ secrets.SLACK_WEBHOOK }}

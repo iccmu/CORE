@@ -25,16 +25,12 @@ class AccordionBlock(blocks.StructBlock):
     content = blocks.RichTextBlock(
         required=True,
         features=[
-            'h2', 'h3', 'h4', 'h5', 'h6',
             'bold', 'italic',
+            'link',
+            'h2', 'h3', 'h4',
             'ol', 'ul',
-            'link', 'document-link',
-            'image', 'embed',
-            'hr',
             'blockquote',
-            'superscript', 'subscript',
-            'strikethrough',
-            'code'
+            'hr',
         ],
         help_text="Contenido del acordeón (HTML enriquecido)"
     )

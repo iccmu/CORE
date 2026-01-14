@@ -34,6 +34,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "fondos.iccmu.es",
     "madmusic.iccmu.es",
+    "madmusic3.iccmu.es",
     "test.iccmu.es",
     "localhost",
     "127.0.0.1",
@@ -55,6 +56,8 @@ INSTALLED_APPS = [
     "madmusic_app",
     "test_app",
     "taggit",
+    # CMS debe ir ANTES de Wagtail para que los hooks se registren correctamente
+    "cms",
     "wagtail",
     "wagtail.admin",
     "wagtail.users",
@@ -64,9 +67,9 @@ INSTALLED_APPS = [
     "wagtail.sites",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
+    "wagtail.contrib.settings",
     "wagtail.embeds",
     "wagtail.search",
-    "cms",
 ]
 
 MIDDLEWARE = [
@@ -78,6 +81,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "proyectos.middleware.DomainUrlConfMiddleware",
+    "proyectos.wagtail_site_middleware.WagtailSiteMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
     "proyectos.error_middleware.Custom404Middleware",
 ]
@@ -88,6 +92,7 @@ ROOT_URLCONF = "proyectos.urls_root"
 URLCONFS_BY_HOST = {
     "fondos.iccmu.es": "proyectos.urls_fondos",
     "madmusic.iccmu.es": "proyectos.urls_madmusic",
+    "madmusic3.iccmu.es": "proyectos.urls_madmusic3",
     "test.iccmu.es": "proyectos.urls_test",
     # localhost y 127.0.0.1 usan ROOT_URLCONF (urls_root) que muestra la página de índice
 }
@@ -195,3 +200,6 @@ WAGTAILADMIN_BASE_URL = os.environ.get("WAGTAILADMIN_BASE_URL", "http://127.0.0.
 
 # Configuración de Wagtail para imágenes
 WAGTAILIMAGES_IMAGE_MODEL = "wagtailimages.Image"
+
+# Branding personalizado de Wagtail
+# Nota: Se usa wagtail_hooks.py para reemplazar el logo dinámicamente

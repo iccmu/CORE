@@ -1,6 +1,10 @@
 {% load static %}
 {% load wagtailcore_tags %}
+{% load wagtailuserbar %}
 {% load cms_tags %}
+
+{# Obtener colores de la HomePage (con valores por defecto incluidos en los métodos) #}
+{% with primary_color=page.get_site.root_page.specific.get_primary_color secondary_color=page.get_site.root_page.specific.get_secondary_color gradient_start=page.get_site.root_page.specific.get_gradient_start gradient_end=page.get_site.root_page.specific.get_gradient_end %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -23,8 +27,88 @@
     <link href="{% static 'madmusic/css/accordions.css' %}" rel="stylesheet"/>
     
     {% block extra_css %}{% endblock %}
+    
+    <!-- CSS y JS personalizado para el userbar de Wagtail -->
+    <style>
+        /* Estilos para el logo personalizado en el userbar */
+        .wagtail-userbar-trigger {
+            transition: all 0.3s ease !important;
+            overflow: hidden !important;
+        }
+        
+        .iccmu-userbar-logo {
+            width: 35px !important;
+            height: 35px !important;
+            border-radius: 50%;
+            object-fit: contain;
+            transition: all 0.3s ease;
+        }
+        
+        /* Hover effect en el userbar */
+        .wagtail-userbar-trigger:hover .iccmu-userbar-logo {
+            transform: scale(1.2) rotate(8deg) !important;
+        }
+        
+        .wagtail-userbar-trigger:hover {
+            box-shadow: 0 6px 16px rgba(209, 25, 34, 0.6) !important;
+        }
+    </style>
+    
+    <script>
+    // Reemplazar el logo del userbar de Wagtail con el logo del ICCMU
+    function replaceUserbarLogo() {
+        // Buscar Shadow DOM del userbar
+        const shadowHosts = Array.from(document.querySelectorAll('*')).filter(el => el.shadowRoot);
+        
+        for (const host of shadowHosts) {
+            const trigger = host.shadowRoot.querySelector('button');
+            
+            if (trigger && !trigger.querySelector('.iccmu-userbar-logo')) {
+                // Limpiar y agregar nuestro logo
+                trigger.innerHTML = '';
+                trigger.style.cssText += '; padding: 8px !important; background: #1f2937 !important; border-radius: 50% !important;';
+                
+                const img = document.createElement('img');
+                img.src = '{% static "madmusic/img/logo_wagtail.png" %}';
+                img.alt = 'ICCMU';
+                img.className = 'iccmu-userbar-logo';
+                img.style.cssText = 'width: 35px; height: 35px; border-radius: 50%; object-fit: contain; display: block; transition: all 0.3s ease;';
+                trigger.appendChild(img);
+                
+                // Hover effect
+                trigger.addEventListener('mouseenter', () => {
+                    img.style.transform = 'scale(1.2) rotate(8deg)';
+                });
+                trigger.addEventListener('mouseleave', () => {
+                    img.style.transform = 'scale(1) rotate(0deg)';
+                });
+                
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    // Reemplazar tan pronto como sea posible
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(replaceUserbarLogo, 200);
+            setTimeout(replaceUserbarLogo, 600);
+        });
+    } else {
+        setTimeout(replaceUserbarLogo, 200);
+        setTimeout(replaceUserbarLogo, 600);
+    }
+    
+    window.addEventListener('load', () => {
+        setTimeout(replaceUserbarLogo, 300);
+    });
+    </script>
 </head>
 <body class="home wp-singular {% block body_class %}{% endblock %}">
+    <!-- Barra de administración estándar de Wagtail -->
+    {% wagtailuserbar %}
+    
     <div class="out" id="velado"></div>
     
     <style>
@@ -225,7 +309,7 @@
             left: 0 !important;
             right: 0 !important;
             z-index: 150 !important;
-            background-color: #c1272d !important;
+            /* El color se establece inline desde el template */
             max-height: 0 !important;
             opacity: 0 !important;
             transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease !important;
@@ -266,17 +350,19 @@
             min-width: 0 !important;
         }
         
-        #menu_principal .menu-item > a {
-            padding: 18px 8px !important;
+        /* Selector MUY específico para asegurar que sobrescriba cualquier otro estilo */
+        #header #menu_principal_container #menu_principal .menu-item > a {
+            padding: 8px 8px !important;  /* Reducido aún más */
             font-size: 11.5px !important;
             display: block !important;
             letter-spacing: -0.3px !important;
+            line-height: 1.2 !important;  /* Altura de línea más compacta */
         }
         
         /* Pantallas muy grandes pueden tener más espacio */
         @media (min-width: 1600px) {
-            #menu_principal .menu-item > a {
-                padding: 18px 12px !important;
+            #header #menu_principal_container #menu_principal .menu-item > a {
+                padding: 10px 12px !important;
                 font-size: 12.5px !important;
                 letter-spacing: 0px !important;
             }
@@ -284,8 +370,8 @@
         
         /* Pantallas medianas */
         @media (min-width: 1400px) and (max-width: 1599px) {
-            #menu_principal .menu-item > a {
-                padding: 18px 10px !important;
+            #header #menu_principal_container #menu_principal .menu-item > a {
+                padding: 9px 10px !important;
                 font-size: 12px !important;
                 letter-spacing: -0.2px !important;
             }
@@ -293,24 +379,24 @@
         
         /* Pantallas pequeñas - aún más compacto */
         @media (max-width: 1399px) and (min-width: 1201px) {
-            #menu_principal .menu-item > a {
-                padding: 18px 6px !important;
+            #header #menu_principal_container #menu_principal .menu-item > a {
+                padding: 8px 6px !important;
                 font-size: 10.5px !important;
                 letter-spacing: -0.4px !important;
             }
         }
         
         @media (max-width: 1200px) {
-            #menu_principal .menu-item > a {
-                padding: 18px 4px !important;
+            #header #menu_principal_container #menu_principal .menu-item > a {
+                padding: 8px 4px !important;
                 font-size: 10px !important;
                 letter-spacing: -0.5px !important;
             }
         }
         
         @media (max-width: 992px) {
-            #menu_principal .menu-item > a {
-                padding: 18px 3px !important;
+            #header #menu_principal_container #menu_principal .menu-item > a {
+                padding: 8px 3px !important;
                 font-size: 9px !important;
                 letter-spacing: -0.5px !important;
             }
@@ -425,6 +511,8 @@
     </style>
     
     <header class="site-header" id="header">
+        {% if "Madmusic3" not in page.get_site.site_name %}
+        {# Madmusic original: carrusel con imágenes reales #}
         <ul id="header_image_slider">
             <li style="background-image: url({% static 'madmusic/images/Danza_Goya.jpg' %})"></li>
             <li style="background-image: url({% static 'madmusic/images/02-CUBIERTAS-CATÁLOGO-ICCMU-20-X-210-TRAZADA_Página_1-e1627641751618.png' %})"></li>
@@ -432,18 +520,41 @@
         <div class="overlay_container">
             <div class="overlay" style="background-color: #0a0000"></div>
         </div>
+        {% else %}
+        {# Madmusic3: placeholder vectorial simple con colores dinámicos #}
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 430px; background: linear-gradient(135deg, {{ gradient_start }} 0%, {{ gradient_end }} 100%); z-index: 1; display: flex; align-items: center; justify-content: center;">
+            <svg width="200" height="200" viewBox="0 0 200 200" style="opacity: 0.15;">
+                <!-- Icono de imagen placeholder -->
+                <rect x="20" y="40" width="160" height="120" rx="8" fill="none" stroke="white" stroke-width="3"/>
+                <circle cx="60" cy="85" r="15" fill="white"/>
+                <path d="M20 130 L70 90 L110 120 L180 70 L180 160 L20 160 Z" fill="white"/>
+                <!-- Texto indicativo -->
+                <text x="100" y="185" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" opacity="0.8">Agrega tu imagen aquí</text>
+            </svg>
+        </div>
+        {% endif %}
         <ul id="header_text_slider">
             <li>
-                <a href="/madmusic/" style="text-decoration: none;">
+                <a href="{% if page.get_site.root_page %}{{ page.get_site.root_page.url }}{% else %}/{% endif %}" style="text-decoration: none;">
                     <div class="container">
-                        <h1 class="title">MadMusic-CM H2019/HUM-5731</h1>
-                        <h6 class="subtitle">Espacios, géneros y públicos de la música en Madrid (ss. XVII-XX)</h6>
+                        {% if page.get_site %}
+                        <div class="site-name" style="color: #ffffff; font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9);">
+                            {{ page.get_site.site_name }}
+                        </div>
+                        {% endif %}
+                        <h1 class="title">{{ page.get_site.root_page.specific.header_title|default:"MadMusic-CM H2019/HUM-5731" }}</h1>
+                        <h6 class="subtitle">{{ page.get_site.root_page.specific.header_subtitle|default:"Espacios, géneros y públicos de la música en Madrid (ss. XVII-XX)" }}</h6>
                     </div>
                 </a>
             </li>
             <li>
-                <a href="#" style="text-decoration: none;">
+                <a href="{% if page.get_site.root_page %}{{ page.get_site.root_page.url }}{% else %}/{% endif %}" style="text-decoration: none;">
                     <div class="container">
+                        {% if page.get_site %}
+                        <div class="site-name" style="color: #ffffff; font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9);">
+                            {{ page.get_site.site_name }}
+                        </div>
+                        {% endif %}
                         <h1 class="title">De la corte real a los bailes clandestinos</h1>
                         <h6 class="subtitle"></h6>
                     </div>
@@ -457,7 +568,7 @@
                 </a>
             </h2>
             <p class="inicio-btn">
-                <a href="/madmusic/">Volver al inicio</a>
+                <a href="{% if page.get_site.root_page %}{{ page.get_site.root_page.url }}{% else %}/{% endif %}">Volver al inicio</a>
             </p>
             <div class="logo logo_title">
                 <div class="text_container">
@@ -534,9 +645,10 @@
                 </div>
             </div>
             
-            <!-- Submenú (Nivel 2 - Barra Roja) -->
+            <!-- Submenú (Nivel 2 - Barra con color secundario dinámico) -->
             <div class="submenu_menu_principal {% if wagtail_secondary_menu %}page-active{% endif %}" 
-                 id="submenu_container">
+                 id="submenu_container"
+                 style="background-color: {{ secondary_color }} !important;">
                 <div class="container">
                     <ul class="menu" id="submenu_items" style="pointer-events: auto; display: flex; flex-wrap: wrap; gap: 25px; margin: 0; padding: 0; list-style: none;">
                         {% if wagtail_secondary_menu %}
@@ -981,6 +1093,7 @@
             pointer-events: auto !important;
             z-index: 50 !important;
         }
+        
     </style>
     
     <!-- JavaScript para hover del menú -->
@@ -1181,6 +1294,31 @@
         }
     })();
     </script>
+    
+    {# Inyectar colores dinámicos en el CSS #}
+    <style>
+        /* Aplicar color primario a elementos de contenido (NO al menú) */
+        .title span,
+        .pagina-detalle h1 span {
+            color: {{ primary_color }} !important;
+        }
+        
+        /* Color de hover en enlaces del contenido y footer (NO menú principal) */
+        .site-main a:hover,
+        .pagina-detalle a:hover,
+        .social-link:hover,
+        .footer-column ul li a:hover,
+        .footer-legal a:hover {
+            color: {{ primary_color }} !important;
+        }
+        
+        /* Borde del submenú con color secundario */
+        .submenu_menu_principal {
+            border-top-color: {{ secondary_color }} !important;
+        }
+    </style>
+    
+    {% endwith %}
 </body>
 </html>
 

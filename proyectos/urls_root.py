@@ -9,14 +9,14 @@ from .views import index_view
 
 urlpatterns = [
     path("", index_view, name="index"),
-    # Admin de Wagtail (accesible desde localhost)
+    # Admin único de Wagtail (gestiona TODOS los Sites)
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("fondos/", include("fondos_app.urls")),
-    # Madmusic ahora usa Wagtail CMS
-    path("madmusic/admin/", include(wagtailadmin_urls)),
-    path("madmusic/documents/", include(wagtaildocs_urls)),
+    # Madmusic - Páginas Wagtail
     path("madmusic/", include(wagtail_urls)),
+    # Madmusic3 - Páginas Wagtail
+    path("madmusic3/", include(wagtail_urls)),
     path("test/", include("test_app.urls")),
 ]
 

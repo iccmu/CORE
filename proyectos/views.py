@@ -21,6 +21,12 @@ def index_view(request):
             "url": "/madmusic/",
         },
         {
+            "name": "madmusic3_app",
+            "display_name": "Madmusic3",
+            "slug": "madmusic3",
+            "url": "/madmusic3/",
+        },
+        {
             "name": "test_app",
             "display_name": "Test",
             "slug": "test",

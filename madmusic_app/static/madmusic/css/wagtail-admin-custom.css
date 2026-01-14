@@ -1,0 +1,34 @@
+/* Custom branding CSS for Wagtail Admin */
+
+/* Logo personalizado en el admin */
+.sidebar-wagtail-branding__logo {
+    max-width: 60px !important;
+    max-height: 60px !important;
+    border-radius: 50%;
+    background-color: transparent;
+}
+
+.sidebar-wagtail-branding {
+    background-color: transparent !important;
+    padding: 15px 20px;
+}
+
+/* Ajustar el logo en el sidebar */
+.sidebar-wagtail-branding img {
+    display: block;
+    margin: 0 auto;
+}
+
+/* Logo en el userbar (barra flotante en el frontend) */
+.wagtail-userbar__logo {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+    background-color: transparent !important;
+}
+
+.wagtail-userbar__logo img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}

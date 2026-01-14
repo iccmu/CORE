@@ -27,18 +27,22 @@ def wagtail_menu_context(request):
             # Limpiar path (ej: /madmusic/equipo/ -> equipo)
             path = request.path.strip('/')
             
-            # Manejar rutas de madmusic
+            # Manejar rutas de madmusic y madmusic3
+            home_slug = None
+            slug = None
+            
             if path == 'madmusic' or path.startswith('madmusic/'):
-                # Extraer el slug después de 'madmusic/'
-                if path == 'madmusic':
-                    slug = ''
-                else:
-                    slug = path.replace('madmusic/', '', 1).strip('/')
-                
+                home_slug = 'madmusic-home'
+                slug = path.replace('madmusic/', '', 1).strip('/') if path != 'madmusic' else ''
+            elif path == 'madmusic3' or path.startswith('madmusic3/'):
+                home_slug = 'madmusic3-home'
+                slug = path.replace('madmusic3/', '', 1).strip('/') if path != 'madmusic3' else ''
+            
+            if home_slug:
                 # Buscar página por slug
-                home_page = HomePage.objects.filter(slug='madmusic-home').first()
+                home_page = HomePage.objects.filter(slug=home_slug).first()
                 
-                # Si el slug está vacío, estamos en la home de madmusic
+                # Si el slug está vacío, estamos en la home
                 if home_page and not slug:
                     current_page = home_page
                 elif home_page and slug:
@@ -61,13 +65,27 @@ def wagtail_menu_context(request):
             import sys
             print(f"Error detecting current page: {e}", file=sys.stderr)
     
-    # Obtener HomePage
+    # Obtener HomePage - detectar automáticamente según la URL
     primary_menu = []
     secondary_menu = []
     
     try:
         from cms.models import HomePage
-        home_page = HomePage.objects.filter(slug='madmusic-home').first()
+        
+        # Detectar cuál HomePage usar basado en la ruta
+        path = request.path.strip('/')
+        home_slug = 'madmusic-home'  # Default
+        
+        if path.startswith('madmusic3/') or path == 'madmusic3':
+            home_slug = 'madmusic3-home'
+        elif path.startswith('madmusic/') or path == 'madmusic':
+            home_slug = 'madmusic-home'
+        elif hasattr(request, 'site') and request.site:
+            # Si el middleware de Wagtail configuró el site
+            if request.site.root_page.slug == 'madmusic3-home':
+                home_slug = 'madmusic3-home'
+        
+        home_page = HomePage.objects.filter(slug=home_slug).first()
         
         if home_page:
             # Generar menú primario (nivel 1) con sus hijos incluidos
